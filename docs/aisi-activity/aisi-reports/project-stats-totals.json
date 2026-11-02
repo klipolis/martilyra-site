@@ -1,0 +1,11 @@
+{
+  "generated_at": "2026-10-21",
+  "source": "Az aktuális Copilot session összefoglalója",
+  "totals": {
+    "sessions": 1,
+    "user_messages": 30,
+    "token_usage": null,
+    "active_time": null,
+    "note": "Az összefoglaló csak a sessionök és a felhasználói üzenetek darabszámát tartalmazza. Tokenhasználati és aktív időadat nem áll rendelkezésre."
+  }
+}

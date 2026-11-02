@@ -1,0 +1,7 @@
+_temp
+
+node-modules
+
+dist/
+__pycache__/
+*.py[cod]
