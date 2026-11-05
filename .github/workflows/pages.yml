@@ -31,26 +31,51 @@ jobs:
         id: pages
         uses: actions/configure-pages@v4
 
-      - name: Build Jekyll site
+      - name: Prepare Jekyll source
         run: |
-          bundle install
-          bundle exec jekyll build --source . --baseurl "${{ steps.pages.outputs.base_path }}"
+          mkdir -p site
+          rsync -a --exclude='/assets/' CONTENT/ site/
+          mkdir -p site/CONTENT
+          cp -R CONTENT/assets site/CONTENT/
+          cp -R .github/site-generator/_layouts .github/site-generator/_includes site/
+          mkdir -p site/assets
+          cp -R .github/site-generator/assets/. site/assets/
+          cat > site/_config.yml <<'EOF'
+          title: Marti Lyra
+          permalink: pretty
+          EOF
+
+      - name: Build Jekyll site
+        run: bundle exec jekyll build --source site --destination _site --baseurl "${{ steps.pages.outputs.base_path }}"
         env:
           PAGES_REPO_NWO: ${{ github.repository }}
           JEKYLL_ENV: production
 
-      - name: Fix markdown links to directory URLs
+      - name: Add Pages base path to internal links
+        env:
+          BASE_PATH: ${{ steps.pages.outputs.base_path }}
         run: |
-          for f in _site/*.html; do
-            [ -f "$f" ] || continue
-            dir="$(basename "$f" .html)"
-            mkdir -p "_site/$dir"
-            mv "$f" "_site/$dir/index.html"
-          done
-          find _site -name "*.html" -type f -exec sed -i 's/\/index\.md/\//g' {} +
-          find _site -name "*.html" -type f -exec sed -i 's/\.md\([#"]\)/\1/g' {} +
-          find _site -name "*.html" -type f -exec sed -i 's|\.md"|/"|g' {} +
-          find _site -name "*.html" -type f -exec sed -i "s|\.md'|/'|g" {} +
+          python3 - <<'PY'
+          import os
+          import re
+          from pathlib import Path
+
+          base_path = os.environ["BASE_PATH"].rstrip("/")
+          if base_path:
+              base_segment = re.escape(base_path.lstrip("/"))
+              pattern = re.compile(
+                  r"""(?P<prefix>\b(?:href|src)=["'])/(?!/)(?!"""
+                  + base_segment
+                  + r"""(?:/|["']))"""
+              )
+              for html_file in Path("_site").rglob("*.html"):
+                  html = html_file.read_text(encoding="utf-8")
+                  html = pattern.sub(
+                      lambda match: match.group("prefix") + base_path + "/",
+                      html,
+                  )
+                  html_file.write_text(html, encoding="utf-8")
+          PY
           # Make external links open in new tab
           find _site -name "*.html" -type f -exec sed -i -E 's|<a href="(https?://[^"]+)"([^>]*)>|<a href="\1"\2 target="_blank" rel="noopener noreferrer">|g' {} +
 
