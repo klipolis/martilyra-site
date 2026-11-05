@@ -31,18 +31,6 @@
             {% else %}
               <span>{{ folder_label }}</span>
             {% endif %}
-            <ul>
-              {% for child in pages %}
-                {% assign child_parts = child.path | split: "/" %}
-                {% assign child_folder = child_parts | first %}
-                {% assign child_extension = child.path | split: "." | last %}
-                {% assign child_name = child_parts | last | remove: ".md" %}
-                {% if child_extension == "md" and child_parts.size > 1 and child_folder == folder and child.path != folder_index_path %}
-                  {% assign child_label = child.title | default: child_name | replace: "-", " " %}
-                  <li><a href="{{ child.url | relative_url }}">{{ child_label }}</a></li>
-                {% endif %}
-              {% endfor %}
-            </ul>
           </li>
         {% endunless %}
       {% endif %}

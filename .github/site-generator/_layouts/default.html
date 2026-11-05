@@ -9,11 +9,10 @@
 <body>
   <div class="layout-wrapper">
     <aside class="sidebar">
-      <button class="sidebar-toggle" aria-label="Toggle menu" onclick="toggleSidebar()"></button>
+      <button class="sidebar-toggle" aria-label="Menü megnyitása" aria-expanded="false" onclick="toggleSidebar()"></button>
       <div class="sidebar-content">
         <div class="sidebar-brand">
           <a class="site-title" href="{{ '/' | relative_url }}">
-            <img src="/CONTENT/assets/images/profile-photo.jpg" alt="{{ site.data.site.title }} profilfotó" height="40">
             {{ site.data.site.title }}
           </a>
         </div>
@@ -22,7 +21,9 @@
     </aside>
     <main class="main-content">
       <div class="container container-1185">
+        {% if page.title %}
         <h2>{{ page.title }}</h2>
+        {% endif %}
         {{ content }}
       </div>
       {% include footer.html %}

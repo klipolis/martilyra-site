@@ -1,73 +1,50 @@
 (function () {
   'use strict';
 
-  var MOBILE_BREAKPOINT = 720;
-
   function getCookie(name) {
     var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
     return match ? match[2] : null;
   }
 
-  function setCookie(name, value, days) {
-    var expires = '';
-    if (days) {
-      var date = new Date();
-      date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-      expires = '; expires=' + date.toUTCString();
-    }
-    document.cookie = name + '=' + value + expires + ';path=/';
-  }
-
-  function isMobile() {
-    return window.innerWidth <= MOBILE_BREAKPOINT;
-  }
-
-  function collapseSidebar() {
-    document.querySelector('.layout-wrapper').classList.add('sidebar-expanded');
-    setCookie('sidebarState', 'collapsed', 365);
-  }
-
-  function expandSidebar() {
-    document.querySelector('.layout-wrapper').classList.remove('sidebar-expanded');
-    setCookie('sidebarState', 'expanded', 365);
+  function setCookie(name, value) {
+    var date = new Date();
+    date.setFullYear(date.getFullYear() + 1);
+    document.cookie = name + '=' + value + '; expires=' + date.toUTCString() + ';path=/;SameSite=Lax';
   }
 
   window.toggleSidebar = function () {
     var wrapper = document.querySelector('.layout-wrapper');
-    var isCollapsed = wrapper.classList.toggle('sidebar-expanded');
-    setCookie('sidebarState', isCollapsed ? 'collapsed' : 'expanded', 365);
+    var isExpanded = wrapper.classList.toggle('sidebar-expanded');
+    setCookie('sidebarView', isExpanded ? 'expanded' : 'collapsed');
+    updateToggleButton(isExpanded);
   };
 
   function init() {
     var wrapper = document.querySelector('.layout-wrapper');
-    var savedState = getCookie('sidebarState');
-    var startCollapsed = isMobile() ? true : (savedState === 'collapsed');
+    var isExpanded = getCookie('sidebarView') === 'expanded';
+    wrapper.classList.toggle('sidebar-expanded', isExpanded);
+    updateToggleButton(isExpanded);
 
-    if (startCollapsed) {
-      wrapper.classList.add('sidebar-expanded');
-    } else {
-      wrapper.classList.remove('sidebar-expanded');
-    }
-
-    var sidebar = document.querySelector('.sidebar');
-    if (sidebar) {
-      sidebar.addEventListener('click', function() {
-        // Keep click handling if needed
+    var navLinks = wrapper.querySelectorAll('.sidebar-nav a[href]');
+    for (var i = 0; i < navLinks.length; i++) {
+      navLinks[i].addEventListener('click', function () {
+        if (window.matchMedia('(hover: none)').matches) {
+          wrapper.classList.remove('sidebar-expanded');
+          setCookie('sidebarView', 'collapsed');
+          updateToggleButton(false);
+        }
       });
     }
 
-    if (isMobile()) {
-      var navLinks = wrapper.querySelectorAll('.sidebar-nav a[href]');
-      for (var i = 0; i < navLinks.length; i++) {
-        (function (link) {
-          link.addEventListener('click', function () {
-            collapseSidebar();
-          });
-        })(navLinks[i]);
-      }
-    }
-
     markCurrentPage();
+  }
+
+  function updateToggleButton(isExpanded) {
+    var button = document.querySelector('.sidebar-toggle');
+    if (button) {
+      button.setAttribute('aria-expanded', String(isExpanded));
+      button.setAttribute('aria-label', isExpanded ? 'Menü bezárása' : 'Menü megnyitása');
+    }
   }
 
   function markCurrentPage() {
