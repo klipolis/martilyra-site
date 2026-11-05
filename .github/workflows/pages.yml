@@ -36,6 +36,7 @@ jobs:
           bundle install
           bundle exec jekyll build --source . --baseurl "${{ steps.pages.outputs.base_path }}"
         env:
+          PAGES_REPO_NWO: ${{ github.repository }}
           JEKYLL_ENV: production
 
       - name: Fix markdown links to directory URLs
