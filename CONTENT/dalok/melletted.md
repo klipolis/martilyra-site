@@ -11,7 +11,7 @@ video_title: "Melletted"
   <iframe width="560" height="315" src="https://www.youtube.com/embed/mU0Uh_f6BKo" title="Melletted" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 </div>
 
-## Lyricek
+## Dalszöveg
 
 Melletted
 
