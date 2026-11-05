@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hu">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% if page.title %}{{ page.title }} - {{ site.title }}{% else %}marti Lyra{% endif %}</title>
+  <title>{% if page.title %}{{ page.title }} - {% endif %}{{ site.data.site.title }}</title>
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
 </head>
 <body>
@@ -13,11 +13,12 @@
       <div class="sidebar-content">
         <div class="sidebar-brand">
           <a class="site-title" href="{{ '/' | relative_url }}">
-            <img src="/CONTENT/assets/images/profile-photo.jpg" alt="Marti Lyra profilfotó" height="40">
-            Marti Lyra
+            <img src="/CONTENT/assets/images/profile-photo.jpg" alt="{{ site.data.site.title }} profilfotó" height="40">
+            {{ site.data.site.title }}
           </a>
         </div>
         {% include navigation.html %}
+      </div>
     </aside>
     <main class="main-content">
       <div class="container container-1185">

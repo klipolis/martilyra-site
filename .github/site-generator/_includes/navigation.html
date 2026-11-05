@@ -1,7 +1,51 @@
+{% assign pages = site.pages | sort: "path" %}
+{% assign seen_folders = "|" %}
 <nav class="sidebar-nav">
-  <a href="{{ '/' | relative_url }}">Kezdőlap</a>
-  <a href="{{ '/dalok/' | relative_url }}">Dalok</a>
-  <a href="{{ '/blog/' | relative_url }}">Blog</a>
-  <a href="{{ '/linkek/' | relative_url }}">Linkek</a>
-  <a href="{{ '/rolam/' | relative_url }}">Rólam</a>
+  <ul>
+    {% for page in pages %}
+      {% assign path_parts = page.path | split: "/" %}
+      {% assign page_extension = page.path | split: "." | last %}
+      {% assign page_name = path_parts | last | remove: ".md" %}
+      {% if page_extension == "md" and path_parts.size == 1 and page_name != "index" %}
+        {% assign page_label = page.title | default: page_name | replace: "-", " " %}
+        <li><a href="{{ page.url | relative_url }}">{{ page_label }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% for page in pages %}
+      {% assign path_parts = page.path | split: "/" %}
+      {% assign folder = path_parts | first %}
+      {% assign folder_marker = "|" | append: folder | append: "|" %}
+      {% assign page_extension = page.path | split: "." | last %}
+      {% if page_extension == "md" and path_parts.size > 1 and folder != "assets" %}
+        {% unless seen_folders contains folder_marker %}
+          {% assign seen_folders = seen_folders | append: folder_marker %}
+          {% assign folder_index_path = folder | append: "/index.md" %}
+          {% assign folder_index = pages | where: "path", folder_index_path | first %}
+          {% assign folder_label = folder | replace: "-", " " | capitalize %}
+          {% if folder_index %}
+            {% assign folder_label = folder_index.title | default: folder_label %}
+          {% endif %}
+          <li>
+            {% if folder_index %}
+              <a href="{{ folder_index.url | relative_url }}">{{ folder_label }}</a>
+            {% else %}
+              <span>{{ folder_label }}</span>
+            {% endif %}
+            <ul>
+              {% for child in pages %}
+                {% assign child_parts = child.path | split: "/" %}
+                {% assign child_folder = child_parts | first %}
+                {% assign child_extension = child.path | split: "." | last %}
+                {% assign child_name = child_parts | last | remove: ".md" %}
+                {% if child_extension == "md" and child_parts.size > 1 and child_folder == folder and child.path != folder_index_path %}
+                  {% assign child_label = child.title | default: child_name | replace: "-", " " %}
+                  <li><a href="{{ child.url | relative_url }}">{{ child_label }}</a></li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+          </li>
+        {% endunless %}
+      {% endif %}
+    {% endfor %}
+  </ul>
 </nav>

@@ -192,6 +192,16 @@ a[href^="https://"]::after {
   padding: 0;
 }
 
+.sidebar-nav li > span {
+  display: block;
+  padding: 0.15rem 0.2rem;
+  font-weight: bold;
+}
+
+.sidebar-nav li > ul {
+  padding-left: 0.75rem;
+}
+
 .sidebar-nav a {
   display: block;
   padding: 0.15rem 0.2rem;

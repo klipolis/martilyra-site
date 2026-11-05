@@ -37,11 +37,10 @@ jobs:
           rsync -a --exclude='/assets/' CONTENT/ site/
           mkdir -p site/CONTENT
           cp -R CONTENT/assets site/CONTENT/
-          cp -R .github/site-generator/_layouts .github/site-generator/_includes site/
+          cp -R .github/site-generator/_layouts .github/site-generator/_includes .github/site-generator/_data site/
           mkdir -p site/assets
           cp -R .github/site-generator/assets/. site/assets/
           cat > site/_config.yml <<'EOF'
-          title: Marti Lyra
           permalink: pretty
           EOF
 
