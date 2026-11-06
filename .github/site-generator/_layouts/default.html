@@ -6,13 +6,16 @@
   <title>{% if page.title %}{{ page.title }} - {% endif %}{{ site.data.site.title }}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
 </head>
 <body>
   <header class="site-header">
     <div class="site-header-inner">
-      <a class="site-title" href="{{ '/' | relative_url }}">{{ site.data.site.title }}</a>
+      <a class="site-title" href="{{ '/' | relative_url }}">
+        <img src="{{ '/CONTENT/assets/images/facebook-profile-portrait.jpg' | relative_url }}" alt="" width="40" height="40">
+        <span>{{ site.data.site.title }}</span>
+      </a>
       {% include navigation.html %}
     </div>
   </header>

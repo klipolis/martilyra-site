@@ -7,7 +7,7 @@
 
 body {
   margin: 0;
-  font-family: 'DM Sans', Verdana, Tahoma, Arial, Helvetica, sans-serif;
+  font-family: 'Lato', Verdana, Tahoma, Arial, Helvetica, sans-serif;
   font-size: 14px;
   line-height: 1.6;
   color: #151515;
@@ -127,11 +127,26 @@ a[href^="https://"]::after {
 
 .site-title,
 .site-title:visited {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
   flex-shrink: 0;
-  color: #000;
+  color: #222;
   font-size: 1.25rem;
   font-weight: bold;
   text-decoration: none;
+}
+
+.site-title img {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.site-title span {
+  white-space: nowrap;
 }
 
 .site-title:hover {
@@ -159,6 +174,7 @@ a[href^="https://"]::after {
   width: 2.75rem;
   height: 2.75rem;
   place-items: center;
+  color: #292929;
   border-radius: 4px;
   text-decoration: none;
 }
@@ -170,13 +186,13 @@ a[href^="https://"]::after {
 }
 
 .primary-nav a:hover {
-  text-decoration: underline;
+  color: #9c3158;
+  background: #f8e9ef;
 }
 
 .primary-nav a.nav-current {
-  font-weight: bold;
-  color: #000;
-  background: #e0e0e0;
+  color: #9c3158;
+  background: #f8e9ef;
   border-radius: 3px;
 }
 
@@ -242,11 +258,21 @@ a[href^="https://"]::after {
 .home-profile img {
   display: block;
   width: min(100%, 22rem);
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 1;
   margin: 0 auto;
-  border-radius: 1rem;
+  border-radius: 50%;
   object-fit: cover;
   object-position: center;
+}
+
+.songs-intro {
+  margin-bottom: 1.5rem;
+}
+
+.songs-intro p {
+  margin-bottom: 0;
+  color: #444;
+  font-size: 1.1rem;
 }
 
 .social-link.youtube {
@@ -268,6 +294,23 @@ a[href^="https://"]::after {
 }
 .social-link.facebook:hover {
   color: #166fe5;
+}
+
+.social-link.tiktok {
+  color: #111;
+}
+.social-link.tiktok:hover {
+  color: #fe2c55;
+}
+
+.home-portrait-link {
+  display: inline-block;
+  border-radius: 50%;
+}
+
+.home-portrait-link:focus-visible {
+  outline: 3px solid #9c3158;
+  outline-offset: 4px;
 }
 
 /* --- Pre / Code blocks (preserve family-tree ASCII art and anchors) --- */
@@ -767,6 +810,11 @@ iframe {
   .site-title,
   .site-title:visited {
     font-size: 1.05rem;
+  }
+
+  .site-title img {
+    width: 2.1rem;
+    height: 2.1rem;
   }
 
   .primary-nav a {
