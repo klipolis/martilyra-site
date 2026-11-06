@@ -4,6 +4,15 @@ layout: default
 
 <section class="home-profile">
   <a class="home-portrait-link" href="{{ '/dalok/' | relative_url }}" aria-label="Tovább a dalokhoz">
-    <img src="{{ '/CONTENT/assets/images/facebook-profile-portrait.jpg' | relative_url }}" alt="Márti Lyra gitárral" fetchpriority="high">
+    {% assign home_songs = site.pages | where_exp: "song", "song.path contains 'dalok/'" | sort: "title" %}
+    <span class="home-song-slider" data-home-song-slider aria-live="off">
+      {% assign has_first_slide = false %}
+      {% for song in home_songs %}
+        {% if song.video_id and song.image %}
+          <img class="home-song-slide{% unless has_first_slide %} is-active{% endunless %}" src="{{ '/CONTENT/assets/images/' | append: song.image | relative_url }}" alt="" aria-hidden="{% if has_first_slide %}true{% else %}false{% endif %}" {% unless has_first_slide %}fetchpriority="high"{% endunless %} loading="eager">
+          {% assign has_first_slide = true %}
+        {% endif %}
+      {% endfor %}
+    </span>
   </a>
 </section>

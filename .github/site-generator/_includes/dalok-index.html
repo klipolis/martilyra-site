@@ -1,4 +1,4 @@
-<div class="content-card-grid">
+<div class="song-card-grid">
   {% assign songs = site.pages | where_exp: "song", "song.path contains 'dalok/'" | sort: "title" %}
   {% for song in songs %}
     {% if song.video_id %}
@@ -9,9 +9,12 @@
       {% else %}
         {% assign thumbnail = '/CONTENT/assets/images/' | append: song.image | relative_url %}
       {% endif %}
-      <a class="content-card" href="{{ song.url | relative_url }}">
-        <img src="{{ thumbnail }}" alt="{{ song.title }} videó-borító" loading="lazy">
-        <span class="content-card-title">{{ song.title }}</span>
+      <a class="song-card" href="{{ song.url | relative_url }}" style="--song-color: {{ song.image_color | default: '#343434' }}; --song-text-color: {{ song.image_text_color | default: '#ffffff' }}">
+        <img class="song-card-hover-image" src="{{ '/CONTENT/assets/images/' | append: song.image | relative_url }}" alt="" loading="lazy">
+        <span class="song-card-content">
+          <img class="song-card-thumbnail" src="{{ thumbnail }}" alt="" loading="lazy">
+          <span class="song-card-title">{{ song.title }}</span>
+        </span>
       </a>
     {% endif %}
   {% endfor %}

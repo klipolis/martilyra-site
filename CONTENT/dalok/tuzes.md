@@ -3,6 +3,8 @@ title: Tüzes
 layout: default
 video_id: IZ6hYASknlc
 image: tuzes.jpg
+image_color: "#D8E9F2"
+image_text_color: "#171717"
 lyrics: true
 ---
 

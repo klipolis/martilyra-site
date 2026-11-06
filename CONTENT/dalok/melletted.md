@@ -3,6 +3,8 @@ title: Melletted
 layout: default
 video_id: mU0Uh_f6BKo
 image: melletted.jpg
+image_color: "#5F5E69"
+image_text_color: "#FFFFFF"
 lyrics: true
 ---
 

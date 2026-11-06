@@ -3,6 +3,8 @@ title: Hangokon túl
 layout: default
 video_id: iAaQCdBHNfw
 image: hangokon-tul.jpg
+image_color: "#4A3632"
+image_text_color: "#FFFFFF"
 lyrics: true
 ---
 

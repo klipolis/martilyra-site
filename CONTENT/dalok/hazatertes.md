@@ -3,6 +3,8 @@ title: Hazatértés
 layout: default
 video_id: VScWWlzQMPY
 image: hazateres.jpg
+image_color: "#A5A39B"
+image_text_color: "#171717"
 lyrics: true
 ---
 

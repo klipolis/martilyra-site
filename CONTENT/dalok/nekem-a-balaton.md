@@ -3,6 +3,8 @@ title: Nekem a Balaton
 layout: default
 video_id: 2TUtvvsklAU
 image: nekem-a-balaton.jpg
+image_color: "#FBF6EB"
+image_text_color: "#171717"
 lyrics: true
 ---
 

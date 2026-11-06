@@ -4,6 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% if page.title %}{{ page.title }} - {% endif %}{{ site.data.site.title }}</title>
+  {% if page.url == "/" %}
+    {% assign home_songs = site.pages | where_exp: "song", "song.path contains 'dalok/'" | sort: "title" %}
+    {% for song in home_songs %}
+      {% if song.video_id and song.image %}
+        <link rel="preload" as="image" href="{{ '/CONTENT/assets/images/' | append: song.image | relative_url }}">
+      {% endif %}
+    {% endfor %}
+  {% endif %}
   <script>
     (function () {
       var savedTheme = localStorage.getItem('martilyra-theme');

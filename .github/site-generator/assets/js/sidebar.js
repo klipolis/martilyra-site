@@ -3,9 +3,38 @@
 
   function init() {
     initThemeToggle();
+    initHomeSongSlider();
     markCurrentPage();
     initBlogPagination();
     initVideoFacades();
+  }
+
+  function initHomeSongSlider() {
+    var slider = document.querySelector('[data-home-song-slider]');
+    if (!slider || (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) {
+      return;
+    }
+
+    var slides = Array.prototype.slice.call(slider.querySelectorAll('.home-song-slide'));
+    if (slides.length < 2) {
+      return;
+    }
+
+    var activeIndex = slides.findIndex(function (slide) {
+      return slide.classList.contains('is-active');
+    });
+    if (activeIndex < 0) {
+      activeIndex = 0;
+      slides[activeIndex].classList.add('is-active');
+    }
+
+    window.setInterval(function () {
+      slides[activeIndex].classList.remove('is-active');
+      slides[activeIndex].setAttribute('aria-hidden', 'true');
+      activeIndex = (activeIndex + 1) % slides.length;
+      slides[activeIndex].classList.add('is-active');
+      slides[activeIndex].setAttribute('aria-hidden', 'false');
+    }, 5000);
   }
 
   function initThemeToggle() {
