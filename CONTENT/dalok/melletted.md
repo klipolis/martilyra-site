@@ -3,13 +3,14 @@ title: Melletted
 layout: default
 video_id: mU0Uh_f6BKo
 video_title: "Melletted"
+thumbnail: melletted.jpg
+image: melletted.jpg
+lyrics: true
 ---
 
-# Melletted
+<a class="github-image-preview" href="../assets/images/melletted.jpg"><img src="../assets/images/thumbnails/melletted.jpg" alt="Melletted borítóképe" width="150" height="150"></a>
 
-<div class="video-player">
-  <iframe width="560" height="315" src="https://www.youtube.com/embed/mU0Uh_f6BKo" title="Melletted" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-</div>
+# Melletted
 
 ## Dalszöveg
 

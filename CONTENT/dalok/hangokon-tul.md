@@ -3,15 +3,16 @@ title: Hangokon túl
 layout: default
 video_id: iAaQCdBHNfw
 video_title: "Hangokon túl"
+thumbnail: hangokon-tul.jpg
+image: hangokon-tul.jpg
+lyrics: true
 ---
+
+<a class="github-image-preview" href="../assets/images/hangokon-tul.jpg"><img src="../assets/images/thumbnails/hangokon-tul.jpg" alt="Hangokon túl borítóképe" width="150" height="150"></a>
 
 # Hangokon túl
 
-<div class="video-player">
-  <iframe width="560" height="315" src="https://www.youtube.com/embed/iAaQCdBHNfw" title="Hangokon túl" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-</div>
-
-## Lyricek
+## Dalszöveg
 
 Hangokon túl
 

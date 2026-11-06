@@ -7,13 +7,15 @@ layout: default
 
 Az alábbi dalok a Marti Lyra YouTube csatornáról:
 
-- [Nekem a Balaton](/dalok/nekem-a-balaton/)
-- [Tüzes](/dalok/tuzes/)
-- [Melletted](/dalok/melletted/)
-- [Hazatértés](/dalok/hazatertes/)
-- [Hangokon túl](/dalok/hangokon-tul/)
-- [Percről percre](/dalok/percro-percre/)
-- [Percről percre audio](/dalok/percro-percre-audio/)
-- [Hamarosan](/dalok/hamarosan/)
-
-Az egyes dalok oldalán megtalálod a videót, valamint ahol elérhető, a dalszöveget.
+<div class="content-card-grid">
+  {% assign songs = site.pages | where_exp: "song", "song.path contains 'dalok/'" | sort: "title" %}
+  {% for song in songs %}
+    {% if song.video_id %}
+      {% assign thumbnail = '/CONTENT/assets/images/thumbnails/' | append: song.thumbnail | relative_url %}
+      <a class="content-card" href="{{ song.url | relative_url }}">
+        <img src="{{ thumbnail }}" alt="{{ song.title }} videó-borító" loading="lazy">
+        <span class="content-card-title">{{ song.title }}</span>
+      </a>
+    {% endif %}
+  {% endfor %}
+</div>

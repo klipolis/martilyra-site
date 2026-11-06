@@ -21,7 +21,31 @@
     </aside>
     <main class="main-content">
       <div class="container container-1185">
+        {% if page.video_id %}
+          {% assign video_image = '/CONTENT/assets/images/' | append: page.image | relative_url %}
+          <div class="song-detail{% if page.lyrics %} has-lyrics{% endif %}">
+            <div class="video-player">
+              <button class="youtube-facade" type="button" data-video-id="{{ page.video_id }}" data-video-title="{{ page.video_title | default: page.title }}">
+                <img src="{{ video_image }}" alt="{{ page.title }} videó-borító" fetchpriority="high">
+                <span class="youtube-play" aria-hidden="true">▶</span>
+                <span class="visually-hidden">A {{ page.title }} videó lejátszása</span>
+              </button>
+            </div>
+            {% if page.lyrics %}
+              <article class="song-lyrics">{{ content }}</article>
+            {% else %}
+              <article class="song-description">{{ content }}</article>
+            {% endif %}
+          </div>
+        {% elsif page.image %}
+          {% assign page_image = '/CONTENT/assets/images/' | append: page.image | relative_url %}
+          <figure class="page-thumbnail">
+            <img src="{{ page_image }}" alt="{{ page.title }}" fetchpriority="high">
+          </figure>
+          {{ content }}
+        {% else %}
         {{ content }}
+        {% endif %}
       </div>
       {% include footer.html %}
     </main>

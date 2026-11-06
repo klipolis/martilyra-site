@@ -3,10 +3,10 @@ title: Percről percre
 layout: default
 video_id: Z1BTqhj1F5M
 video_title: "Percről percre"
+thumbnail: percrol-percre.jpg
+image: percrol-percre.jpg
 ---
 
-# Percről percre
+<a class="github-image-preview" href="../assets/images/percrol-percre.jpg"><img src="../assets/images/thumbnails/percrol-percre.jpg" alt="Percről percre borítóképe" width="150" height="150"></a>
 
-<div class="video-player">
-  <iframe width="560" height="315" src="https://www.youtube.com/embed/Z1BTqhj1F5M" title="Percről percre" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-</div>
+# Percről percre

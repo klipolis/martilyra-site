@@ -3,10 +3,10 @@ title: Hamarosan..
 layout: default
 video_id: 95gs4CoF2Y0
 video_title: "hamarosan.."
+thumbnail: hamarosan.jpg
+image: hamarosan.jpg
 ---
 
-# hamarosan..
+<a class="github-image-preview" href="../assets/images/hamarosan.jpg"><img src="../assets/images/thumbnails/hamarosan.jpg" alt="Hamarosan borítóképe" width="150" height="150"></a>
 
-<div class="video-player">
-  <iframe width="560" height="315" src="https://www.youtube.com/embed/95gs4CoF2Y0" title="hamarosan.." frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-</div>
+# hamarosan..

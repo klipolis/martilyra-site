@@ -3,13 +3,14 @@ title: Hazatértés
 layout: default
 video_id: VScWWlzQMPY
 video_title: "Hazatérsz"
+thumbnail: hazateres.jpg
+image: hazateres.jpg
+lyrics: true
 ---
 
-# Hazatérsz
+<a class="github-image-preview" href="../assets/images/hazateres.jpg"><img src="../assets/images/thumbnails/hazateres.jpg" alt="Hazatérsz borítóképe" width="150" height="150"></a>
 
-<div class="video-player">
-  <iframe width="560" height="315" src="https://www.youtube.com/embed/VScWWlzQMPY" title="Hazatérsz" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-</div>
+# Hazatérsz
 
 ## Dalszöveg
 

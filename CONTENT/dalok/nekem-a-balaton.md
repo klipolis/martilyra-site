@@ -3,13 +3,14 @@ title: Nekem a Balaton
 layout: default
 video_id: 2TUtvvsklAU
 video_title: "Nekem a Balaton"
+thumbnail: nekem-a-balaton.jpg
+image: nekem-a-balaton.jpg
+lyrics: true
 ---
 
-# Nekem a Balaton
+<a class="github-image-preview" href="../assets/images/nekem-a-balaton.jpg"><img src="../assets/images/thumbnails/nekem-a-balaton.jpg" alt="Nekem a Balaton borítóképe" width="150" height="150"></a>
 
-<div class="video-player">
-  <iframe width="560" height="315" src="https://www.youtube.com/embed/2TUtvvsklAU" title="Nekem a Balaton" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-</div>
+# Nekem a Balaton
 
 ## Dalszöveg
 

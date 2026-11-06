@@ -37,6 +37,25 @@
     }
 
     markCurrentPage();
+    initVideoFacades();
+  }
+
+  function initVideoFacades() {
+    var facades = document.querySelectorAll('.youtube-facade[data-video-id]');
+    facades.forEach(function (facade) {
+      facade.addEventListener('click', function () {
+        var videoId = facade.getAttribute('data-video-id');
+        var title = facade.getAttribute('data-video-title');
+        var iframe = document.createElement('iframe');
+        iframe.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(videoId) + '?autoplay=1';
+        iframe.title = title;
+        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+        iframe.allowFullscreen = true;
+        iframe.loading = 'eager';
+        iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+        facade.replaceWith(iframe);
+      });
+    });
   }
 
   function updateToggleButton(isExpanded) {

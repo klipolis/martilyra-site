@@ -3,13 +3,14 @@ title: Tüzes
 layout: default
 video_id: IZ6hYASknlc
 video_title: "Tüzes"
+thumbnail: tuzes.jpg
+image: tuzes.jpg
+lyrics: true
 ---
 
-# Tüzes
+<a class="github-image-preview" href="../assets/images/tuzes.jpg"><img src="../assets/images/thumbnails/tuzes.jpg" alt="Tüzes borítóképe" width="150" height="150"></a>
 
-<div class="video-player">
-  <iframe width="560" height="315" src="https://www.youtube.com/embed/IZ6hYASknlc" title="Tüzes" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-</div>
+# Tüzes
 
 ## Dalszöveg
 
