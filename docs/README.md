@@ -1,56 +1,25 @@
-# Az oldal működése
+# A webhely felépítése
 
-Ez a dokumentum a Máté Domokos weboldalához tartozó magyar nyelvű, Markdown-alapú archívum működését foglalja össze.
+Ez a dokumentum a Marti Lyra magyar nyelvű, Markdown-alapú statikus webhelyének forrásait, felépítését és közzétételét foglalja össze.
 
-## Miért külön statikus webhely?
+## Tartalom
 
-A WordPress kezeli a központi webhelyet, szerkesztőfelületet, médiatárat és piszkozatokat. A blog archívuma ezzel szemben a GitHub Pages-en futó statikus webhely. A Markdown-források és a képek a Gitben követhetők, a `main` ágra kerülő változást a GitHub Actions építi és telepíti.
+- `CONTENT/index.md`: a nyitóoldal.
+- `CONTENT/dalok/`: a dalok oldala és annak forrásai; a front matter tartalmazza többek között a címet, a YouTube-videó azonosítóját és a borítókép nevét.
+- `CONTENT/blog/`: dátummal ellátott blogbejegyzések és képeik.
+- `CONTENT/assets/images/`: a dalok és bejegyzések képei.
+- `CONTENT/assets/images/thumbnails/`: bélyegképek. A dalarchívum a bélyegképet használja, ha létezik, egyébként az eredeti képre vált vissza.
 
-| Szempont | WordPress | GitHub Pages |
-| --- | --- | --- |
-| Előnyök | Beépített adminisztráció, médiatár és piszkozatkezelés. | Gyors, ingyenes statikus tárhely; a tartalom és a módosítások Gitben követhetők. |
-| Hátrányok | Szerver-, adatbázis-, frissítési és biztonsági karbantartást igényel. | Nincs adminfelület; a közzététel GitHub Actions builddel történik. |
+A dal- és blogarchívum nyitóoldala a `.github/site-generator/pages/` mappában van, az archívumok megjelenítését a `.github/site-generator/_includes/` sablonjai végzik. Ezek a fájlok a tartalommal együtt kerülnek a Jekyll forrásmappájába, így az archívumlisták nem igényelnek külön, szerkesztett `CONTENT` indexfájlt. Az oldalak elrendezése a `_layouts/` mappában, a közös címadat a `_data/site.yml` fájlban található.
 
-## Tartalom és útvonalak
+A bejegyzések és dalok útvonalát a forrásfájlok helye és a Jekyll `pretty` permalink-beállítása határozza meg. A fájlok áthelyezése vagy átnevezése módosíthat nyilvános URL-eket, ezért a meglévő útvonalakat meg kell őrizni.
 
-- `CONTENT/*.md`: önálló oldalak; a `_index.md` a blog gyökéroldala.
-- `CONTENT/blog/<év>/<slug>.md`: bejegyzések; a slug a fájlnév, az év a dátum éve.
-- `CONTENT/images/<év>/`: helyi AVIF-képek.
-- `CONTENT/images/_manifest.json`: képméretek és reszponzív `srcset` adatok.
-- `CONTENT/assets/`: stílusok és statikus felületi elemek.
-
-Az önálló oldalak gyökérútvonalat kapnak, a bejegyzések címe `/blog/<slug>/`. A régi slugokat `alias` mezővel lehet átirányítani. A `feed.xml` az RSS-fogyasztók számára a legfrissebb 20 bejegyzést tartalmazza. Formátumát és útvonalát kompatibilisen kell tartani.
-
-## Képek
-
-A borítóképek 400, 768 és 1024 képpont széles AVIF-változatban kerülnek a képtárba. A közös segédprogram elkészíti a változatokat és frissíti a manifestet. A bejegyzés `image` mezője a `CONTENT/images/` alatti 1024 képpontos változatra mutat.
-
-Néhány régi, eredeti webhelyre mutató szövegközi képhivatkozás már nem érhető el. A build ezeket figyelmeztetésben jelzi; csak a forrás rendelkezésre állásakor lehet őket visszaállítani.
 
 ## Építés és közzététel
 
-A build- és tartalomsegédletek a `\.github/site-generator/scripts/` mappában vannak:
+A GitHub Actions a GitHub Pages-re telepíti az oldalt.
 
-- `build_site.py`: Markdown-forrásokból előállítja a statikus webhelyet.
-- `ellenorzes.py`: ellenőrzi a bejegyzések dátumát, slugját és borítóképét.
-- `kep_hozzaadasa.py`: elkészíti a reszponzív AVIF-borítóképeket és frissíti a manifestet.
-- `python-extensions.txt`: a helyi buildhez szükséges Python-csomagok.
+## Kapcsolódó dokumentumok
 
-A helyi ellenőrzés a repó gyökeréből:
-
-```powershell
-python -m pip install -r \.github/site-generator/scripts/python-extensions.txt
-python \.github/site-generator/scripts/build_site.py
-python \.github/site-generator/scripts/ellenorzes.py
-```
-
-A build a `dist/` mappába ír. A Pages-munkafolyamat a `main` ágra történő push után ugyanezt a buildet futtatja, majd telepíti az eredményt. A saját domain miatt a `SITE_BASE_PATH` értéke üres marad; a `.github/workflows/pages.yml` a közzététel belépési pontja.
-
-## Agent-útmutatók és változásnapló
-
-A projekt agent útmutatói a `.agents/` mappában, a megosztott feladatkészségek a gyökér `.skills/` mappájában találhatók. A Claude Code készségei rövid hivatkozók, amelyek azonos gyökérbeli leírásra irányítják az ügynököt.
-
-A kiadott változatok összefoglalója a [CHANGELOG.md](./CHANGELOG.md) fájlban olvasható. A következő kiadás még ki nem adott jegyzetei a `docs/changelog/unreleased.md` fájlba kerülnek.
-
-Az AISI-fejlesztés kizárólagos összesítését az [AISI report](./aisi-activity/aisi-reports/project-stats-totals.md) tartalmazza; az egyedi sessionök és üzenetek nem kerülnek a repóba.
-
+- [Változásnapló](./CHANGELOG.md): a kiadott változások összefoglalója.
+- [Kiadás előtti változások](./changelog/unreleased.md): a következő kiadás jegyzetei.
