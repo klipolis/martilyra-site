@@ -4,13 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% if page.title %}{{ page.title }} - {% endif %}{{ site.data.site.title }}</title>
-  {% if page.url == "/" %}
-    {% assign home_songs = site.pages | where_exp: "song", "song.path contains 'dalok/'" | sort: "title" %}
-    {% for song in home_songs %}
-      {% if song.video_id and song.image %}
-        <link rel="preload" as="image" href="{{ '/CONTENT/assets/images/' | append: song.image | relative_url }}">
-      {% endif %}
-    {% endfor %}
+  {% if page.redirect_to_dalok %}
+    {% assign dalok_redirect_url = site.data.site.dalok_url | relative_url %}
+    <meta http-equiv="refresh" content="0; url={{ dalok_redirect_url }}">
   {% endif %}
   <script>
     (function () {
@@ -26,7 +22,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
 </head>
-<body>
+<body{% if page.video_id %} class="song-detail-page"{% endif %}>
   <header class="site-header">
     <div class="site-header-inner">
       <a class="site-title" href="{{ '/' | relative_url }}">
@@ -36,9 +32,36 @@
       {% include navigation.html %}
     </div>
   </header>
-  <main class="main-content">
+  <main class="main-content{% if page.url == '/' %} song-archive-page{% endif %}">
     <div class="container container-1185">
-      {% if page.video_id %}
+      {% if page.redirect_to_dalok %}
+        {% assign dalok_redirect_url = site.data.site.dalok_url | relative_url %}
+        <p><a href="{{ dalok_redirect_url }}">Tovább a dalokhoz</a></p>
+        <script>window.location.replace("{{ dalok_redirect_url }}");</script>
+      {% elsif page.date %}
+        <div class="blog-page-layout">
+          {% include blog-sidebar.html %}
+          <article class="blog-single">
+            <h1 class="blog-single-title">{{ page.title }}</h1>
+            <time class="blog-post-date" datetime="{{ page.date | date: '%Y-%m-%d' }}">{{ page.date | date: "%Y. %m. %d." }}</time>
+            {% assign post_thumbnail = page.thumbnail | default: page.image %}
+            {% if post_thumbnail %}
+              {% assign page_image = '/CONTENT/assets/images/' | append: post_thumbnail | relative_url %}
+              <img class="blog-post-image" src="{{ page_image }}" alt="{{ page.title }}" fetchpriority="high">
+            {% endif %}
+            {% include related-song.html post=page %}
+            {% assign page_heading_length = page.title.size | plus: 3 %}
+            {% assign page_heading = page.content | strip | slice: 0, page_heading_length %}
+            {% assign expected_page_heading = "## " | append: page.title %}
+            <div class="blog-single-content{% if page_heading == expected_page_heading %} has-title-heading{% endif %}">{{ content }}</div>
+          </article>
+        </div>
+      {% elsif page.url == '/blog/' %}
+        <div class="blog-page-layout">
+          {% include blog-sidebar.html %}
+          <section class="blog-archive-content">{{ content }}</section>
+        </div>
+      {% elsif page.video_id %}
         {% assign video_image = '/CONTENT/assets/images/' | append: page.image | relative_url %}
         <div class="song-detail{% if page.lyrics %} has-lyrics{% endif %}">
           <div class="video-player">
@@ -61,7 +84,7 @@
         </figure>
         {{ content }}
       {% elsif page.url == "/" %}
-        {% include home-profile.html %}
+        {{ content }}
       {% else %}
         {{ content }}
       {% endif %}

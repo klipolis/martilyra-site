@@ -3,11 +3,75 @@
 
   function init() {
     initThemeToggle();
-    initHomeSongSlider();
+    initSongTower();
     initSongCardEffects();
+    initDelayedEffects();
     markCurrentPage();
     initBlogPagination();
     initVideoFacades();
+  }
+
+  function initSongTower() {
+    var tower = document.querySelector('[data-song-tower]');
+    if (!tower) {
+      return;
+    }
+
+    var toggle = tower.querySelector('.song-tower-toggle');
+    var grid = tower.querySelector('.song-card-grid');
+    var cards = Array.prototype.slice.call(tower.querySelectorAll('.song-card'));
+    var prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function setExpanded(expanded) {
+      tower.classList.toggle('is-expanded', expanded);
+      tower.classList.toggle('is-collapsed', !expanded);
+      toggle.setAttribute('aria-expanded', String(expanded));
+      toggle.setAttribute('aria-label', expanded ? 'Dalok összecsukása' : 'Dalok megnyitása');
+      toggle.querySelector('span').textContent = expanded ? 'Dalok összecsukása' : 'Dalok megnyitása';
+      grid.setAttribute('aria-hidden', String(!expanded));
+      cards.forEach(function (card) {
+        if (expanded) {
+          card.removeAttribute('tabindex');
+        } else {
+          card.setAttribute('tabindex', '-1');
+        }
+      });
+    }
+
+    toggle.addEventListener('click', function () {
+      setExpanded(!tower.classList.contains('is-expanded'));
+    });
+
+    tower.addEventListener('click', function (event) {
+      if (tower.classList.contains('is-ready') && !tower.classList.contains('is-expanded') && !event.target.closest('.song-tower-toggle')) {
+        setExpanded(true);
+      }
+    });
+
+    tower.addEventListener('pointermove', function (event) {
+      if (prefersReducedMotion || !tower.classList.contains('is-collapsed') || !tower.classList.contains('is-ready')) {
+        return;
+      }
+
+      var bounds = tower.getBoundingClientRect();
+      var pointerX = (event.clientX - bounds.left) / bounds.width * 2 - 1;
+      var pointerY = (event.clientY - bounds.top) / bounds.height * 2 - 1;
+      tower.style.setProperty('--tower-tilt-x', (-pointerY * 9) + 'deg');
+      tower.style.setProperty('--tower-tilt-y', (-pointerX * 12) + 'deg');
+    });
+
+    tower.addEventListener('pointerleave', function () {
+      tower.style.setProperty('--tower-tilt-x', '0deg');
+      tower.style.setProperty('--tower-tilt-y', '0deg');
+    });
+
+    window.addEventListener('hashchange', function () {
+      if (tower.classList.contains('is-ready') && window.location.hash === '#dalok-archive') {
+        setExpanded(true);
+      }
+    });
+
+    setExpanded(false);
   }
 
   function initSongCardEffects() {
@@ -16,7 +80,12 @@
       return;
     }
 
+    var hideTimer;
+    var resetTimer;
+
     function activate(card) {
+      window.clearTimeout(hideTimer);
+      window.clearTimeout(resetTimer);
       var bounds = card.getBoundingClientRect();
       document.body.style.setProperty('--disco-x', ((bounds.left + bounds.width / 2) / window.innerWidth * 100) + '%');
       document.body.style.setProperty('--disco-y', ((bounds.top + bounds.height / 2) / window.innerHeight * 100) + '%');
@@ -24,15 +93,20 @@
     }
 
     function deactivate() {
-      var activeCard = document.querySelector('.song-card:hover, .song-card:focus-within');
-      if (activeCard) {
-        activate(activeCard);
-        return;
-      }
+      window.clearTimeout(hideTimer);
+      hideTimer = window.setTimeout(function () {
+        var activeCard = document.querySelector('.song-card:hover, .song-card:focus-within');
+        if (activeCard) {
+          activate(activeCard);
+          return;
+        }
 
-      document.body.classList.remove('is-disco-active');
-      document.body.style.removeProperty('--disco-x');
-      document.body.style.removeProperty('--disco-y');
+        document.body.classList.remove('is-disco-active');
+        resetTimer = window.setTimeout(function () {
+          document.body.style.removeProperty('--disco-x');
+          document.body.style.removeProperty('--disco-y');
+        }, 700);
+      }, 650);
     }
 
     cards.forEach(function (card) {
@@ -53,32 +127,20 @@
     });
   }
 
-  function initHomeSongSlider() {
-    var slider = document.querySelector('[data-home-song-slider]');
-    if (!slider || (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) {
-      return;
-    }
-
-    var slides = Array.prototype.slice.call(slider.querySelectorAll('.home-song-slide'));
-    if (slides.length < 2) {
-      return;
-    }
-
-    var activeIndex = slides.findIndex(function (slide) {
-      return slide.classList.contains('is-active');
-    });
-    if (activeIndex < 0) {
-      activeIndex = 0;
-      slides[activeIndex].classList.add('is-active');
-    }
-
-    window.setInterval(function () {
-      slides[activeIndex].classList.remove('is-active');
-      slides[activeIndex].setAttribute('aria-hidden', 'true');
-      activeIndex = (activeIndex + 1) % slides.length;
-      slides[activeIndex].classList.add('is-active');
-      slides[activeIndex].setAttribute('aria-hidden', 'false');
-    }, 5000);
+  function initDelayedEffects() {
+    var towers = Array.prototype.slice.call(document.querySelectorAll('[data-song-tower]'));
+    var prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.setTimeout(function () {
+      document.body.classList.add('site-effects-ready');
+      towers.forEach(function (tower) {
+        tower.classList.add('is-ready');
+        var toggle = tower.querySelector('.song-tower-toggle');
+        toggle.disabled = false;
+        if (window.location.hash === '#dalok-archive' && !tower.classList.contains('is-expanded')) {
+          toggle.click();
+        }
+      });
+    }, prefersReducedMotion ? 0 : 5000);
   }
 
   function initThemeToggle() {

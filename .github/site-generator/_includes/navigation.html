@@ -8,8 +8,12 @@
         {% assign folder_index = pages | where: "path", folder_index_path | first %}
         {% if folder_index %}
           {% assign folder_label = folder_index.title | default: folder | capitalize %}
+          {% assign folder_url = folder_index.url %}
+          {% if folder == "dalok" %}
+            {% assign folder_url = site.data.site.dalok_url %}
+          {% endif %}
           <li>
-            <a href="{{ folder_index.url | relative_url }}" aria-label="{{ folder_label }}" title="{{ folder_label }}">
+            <a href="{{ folder_url | relative_url }}" aria-label="{{ folder_label }}" title="{{ folder_label }}">
               {% if folder == "dalok" %}
                 <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v12.3a3.5 3.5 0 1 1-2-3.16V7l10-2v10.3a3.5 3.5 0 1 1-2-3.16V2l-6 1Z"/></svg>
               {% else %}

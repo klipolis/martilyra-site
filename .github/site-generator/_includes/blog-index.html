@@ -1,39 +1,28 @@
 {% assign blog_posts = site.pages | where_exp: "post", "post.path contains 'blog/'" | sort: "date" | reverse %}
-{% assign songs = site.pages | where_exp: "song", "song.path contains 'dalok/'" %}
 <div class="blog-post-list" data-page-size="20">
   {% for post in blog_posts %}
     {% if post.date %}
       <article class="blog-post">
+        <h2 class="blog-post-title"><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
         <a class="blog-post-date-link" href="{{ post.url | relative_url }}">
           <time class="blog-post-date" datetime="{{ post.date | date: '%Y-%m-%d' }}">{{ post.date | date: "%Y. %m. %d." }}</time>
         </a>
-        {% if post.image %}
-          {% assign image = '/CONTENT/assets/images/' | append: post.image | relative_url %}
-          <img class="blog-post-image" src="{{ image }}" alt="{{ post.title }}" loading="lazy">
-        {% endif %}
-        <div class="blog-post-content">{{ post.content | markdownify }}</div>
-        {% assign linked_song = nil %}
-        {% for song in songs %}
-          {% if song.video_id and post.content contains song.video_id %}
-            {% assign linked_song = song %}
-            {% break %}
-          {% endif %}
-        {% endfor %}
-        {% if linked_song %}
-          {% assign thumbnail_path = '/CONTENT/assets/images/thumbnails/' | append: linked_song.image %}
+        {% assign post_thumbnail = post.thumbnail | default: post.image %}
+        {% if post_thumbnail %}
+          {% assign thumbnail_path = '/CONTENT/assets/images/thumbnails/' | append: post_thumbnail %}
           {% assign thumbnail_file = site.static_files | where: "relative_path", thumbnail_path | first %}
           {% if thumbnail_file %}
-            {% assign song_thumbnail = thumbnail_path | relative_url %}
+            {% assign image = thumbnail_path | relative_url %}
           {% else %}
-            {% assign song_thumbnail = '/CONTENT/assets/images/' | append: linked_song.image | relative_url %}
+            {% assign image = '/CONTENT/assets/images/' | append: post_thumbnail | relative_url %}
           {% endif %}
-          <aside class="related-song">
-            <a class="related-song-link" href="{{ linked_song.url | relative_url }}">
-              <img src="{{ song_thumbnail }}" alt="" loading="lazy">
-              <span>{{ linked_song.title }}</span>
-            </a>
-          </aside>
+          <img class="blog-post-image" src="{{ image }}" alt="{{ post.title }}" loading="lazy">
         {% endif %}
+        {% include related-song.html post=post %}
+        {% assign post_heading_length = post.title.size | plus: 3 %}
+        {% assign post_heading = post.content | strip | slice: 0, post_heading_length %}
+        {% assign expected_post_heading = "## " | append: post.title %}
+        <div class="blog-post-content{% if post_heading == expected_post_heading %} has-title-heading{% endif %}">{{ post.content | markdownify }}</div>
       </article>
     {% endif %}
   {% endfor %}

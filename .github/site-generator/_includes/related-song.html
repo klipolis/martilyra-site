@@ -1,0 +1,23 @@
+{% assign songs = site.pages | where_exp: "song", "song.path contains 'dalok/'" %}
+{% assign linked_song = nil %}
+{% for song in songs %}
+  {% if song.video_id and include.post.content contains song.video_id %}
+    {% assign linked_song = song %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+{% if linked_song %}
+  {% assign thumbnail_path = '/CONTENT/assets/images/thumbnails/' | append: linked_song.image %}
+  {% assign thumbnail_file = site.static_files | where: "relative_path", thumbnail_path | first %}
+  {% if thumbnail_file %}
+    {% assign song_thumbnail = thumbnail_path | relative_url %}
+  {% else %}
+    {% assign song_thumbnail = '/CONTENT/assets/images/' | append: linked_song.image | relative_url %}
+  {% endif %}
+  <aside class="related-song">
+    <a class="related-song-link" href="{{ linked_song.url | relative_url }}">
+      <img src="{{ song_thumbnail }}" alt="" loading="lazy">
+      <span>{{ linked_song.title }}</span>
+    </a>
+  </aside>
+{% endif %}

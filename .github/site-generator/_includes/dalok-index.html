@@ -1,4 +1,8 @@
-<div class="song-card-grid">
+<section class="song-tower is-collapsed" id="dalok-archive" data-song-tower>
+  <button class="song-tower-toggle" type="button" aria-expanded="false" aria-label="Dalok megnyitása" disabled>
+    <span>Dalok megnyitása</span>
+  </button>
+  <div class="song-card-grid" aria-hidden="true">
   {% assign songs = site.pages | where_exp: "song", "song.path contains 'dalok/'" | sort: "title" %}
   {% for song in songs %}
     {% if song.video_id %}
@@ -9,13 +13,20 @@
       {% else %}
         {% assign thumbnail = '/CONTENT/assets/images/' | append: song.image | relative_url %}
       {% endif %}
-      <a class="song-card" href="{{ song.url | relative_url }}" style="--song-color: {{ song.image_color | default: '#343434' }}; --song-text-color: {{ song.image_text_color | default: '#ffffff' }}">
+      {% assign song_title_id = song.path | remove: 'dalok/' | remove: '.md' %}
+      <a class="song-card" href="{{ song.url | relative_url }}" aria-label="{{ song.title }}" style="--song-color: {{ song.image_color | default: '#343434' }}; --song-text-color: {{ song.image_text_color | default: '#ffffff' }}; --song-index: {{ forloop.index0 }}">
         <img class="song-card-hover-image" src="{{ '/CONTENT/assets/images/' | append: song.image | relative_url }}" alt="" loading="lazy">
         <span class="song-card-content">
           <img class="song-card-thumbnail" src="{{ thumbnail }}" alt="" loading="lazy">
-          <span class="song-card-title">{{ song.title }}</span>
+          <svg class="song-card-title" viewBox="0 0 240 240" aria-hidden="true" focusable="false">
+            <defs>
+              <path id="song-title-path-{{ song_title_id }}" d="M 22,120 A 98,98 0 0,0 218,120"></path>
+            </defs>
+            <text><textPath href="#song-title-path-{{ song_title_id }}" startOffset="50%" text-anchor="middle">{{ song.title }}</textPath></text>
+          </svg>
         </span>
       </a>
     {% endif %}
   {% endfor %}
-</div>
+  </div>
+</section>
