@@ -177,7 +177,7 @@ a[href^="https://"]::after {
   position: relative;
   min-height: 23rem;
   margin: 0;
-  perspective: 760px;
+  perspective: 520px;
   perspective-origin: center;
   isolation: isolate;
 }
@@ -201,17 +201,18 @@ a[href^="https://"]::after {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) rotateX(calc(72deg + var(--tower-tilt-x, 0deg))) rotateY(var(--tower-tilt-y, 0deg)) rotateZ(calc(var(--song-index, 0) * 2deg)) translateZ(calc(var(--song-index, 0) * 0.55rem));
+  z-index: calc(1 + var(--song-index, 0));
+  transform: translate(-50%, -50%) rotateX(34deg) rotateZ(calc(var(--song-index, 0) * 2deg)) translateZ(calc(var(--song-index, 0) * 0.55rem)) scale(var(--song-scale, 1));
   transition: box-shadow 0.4s ease, transform 1s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .song-tower.is-collapsed .song-card:hover,
 .song-tower.is-collapsed .song-card:focus-visible {
-  transform: translate(-50%, -50%) rotateX(calc(72deg + var(--tower-tilt-x, 0deg))) rotateY(var(--tower-tilt-y, 0deg)) rotateZ(calc(var(--song-index, 0) * 2deg)) translateZ(calc(var(--song-index, 0) * 0.55rem + 2rem));
+  transform: translate(-50%, -50%) rotateX(34deg) rotateZ(calc(var(--song-index, 0) * 2deg)) translateZ(calc(var(--song-index, 0) * 0.55rem + 7rem)) translateX(var(--hover-x, 0rem)) translateY(var(--hover-y, 0rem)) scale(var(--song-scale, 1));
 }
 
 .song-tower.is-collapsed .song-card:active {
-  transform: translate(-50%, -50%) rotateX(calc(72deg + var(--tower-tilt-x, 0deg))) rotateY(var(--tower-tilt-y, 0deg)) rotateZ(calc(var(--song-index, 0) * 2deg)) translateZ(calc(var(--song-index, 0) * 0.55rem + 2rem)) scale(0.96);
+  transform: translate(-50%, -50%) rotateX(34deg) rotateZ(calc(var(--song-index, 0) * 2deg)) translateZ(calc(var(--song-index, 0) * 0.55rem + 7rem)) translateX(var(--hover-x, 0rem)) translateY(var(--hover-y, 0rem)) scale(var(--song-scale, 1)) scale(0.96);
 }
 
 .song-tower.is-expanded .song-card-grid {
@@ -240,8 +241,19 @@ a[href^="https://"]::after {
   transform: perspective(700px) rotateX(calc(12deg + var(--card-tilt-x, 0deg))) rotateY(var(--card-tilt-y, 0deg)) rotateZ(calc((var(--song-index, 0) - 3.5) * 2deg)) translateY(-1.25rem) translateZ(1rem);
 }
 
+.song-tower.is-expanded .song-card:hover::after,
+.song-tower.is-expanded .song-card:focus-visible::after {
+  opacity: 1;
+  transform: translate(-50%, -50%) translateZ(1rem) scale(1);
+}
+
 .song-tower.is-expanded .song-card:active {
   transform: perspective(700px) rotateX(calc(12deg + var(--card-tilt-x, 0deg))) rotateY(var(--card-tilt-y, 0deg)) rotateZ(calc((var(--song-index, 0) - 3.5) * 2deg)) translateY(-0.4rem) translateZ(0.4rem) scale(0.96);
+}
+
+.song-tower.is-expanded .song-card.is-pressed::after {
+  opacity: 1;
+  transform: translate(-50%, -50%) translateZ(-0.35rem) scale(1.3);
 }
 
 .visually-hidden {
@@ -289,13 +301,33 @@ body.is-disco-active::before {
 }
 
 body.song-detail-page {
-  --disco-x: -12%;
-  --disco-y: 52%;
+  --disco-x: 20%;
+  --disco-y: 35%;
 }
 
-body.song-detail-page.site-effects-ready::before {
+body.song-detail-page::before {
   opacity: 0.62;
   animation: disco-ray-pulse 12s ease-in-out infinite alternate, disco-ray-spin 100s linear infinite;
+}
+
+body.song-detail-page.site-effects-ready .video-player:not(.is-playing) .song-card-hover-image {
+  opacity: 0.42;
+  animation: song-disc-spin 42s linear infinite;
+}
+
+body.song-detail-page.site-effects-ready .video-player:not(.is-playing) .song-card-thumbnail {
+  animation: song-thumbnail-breathe 6s ease-in-out infinite;
+}
+
+@keyframes song-thumbnail-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.24);
+  }
 }
 
 @keyframes disco-ray-pulse {
@@ -1006,8 +1038,8 @@ iframe {
 /* --- Song detail and video facade --- */
 .song-detail {
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-  align-items: start;
+  grid-template-columns: minmax(15.5rem, 0.75fr) minmax(0, 1.25fr);
+  align-items: center;
   gap: 1.5rem;
 }
 
@@ -1015,21 +1047,15 @@ iframe {
   grid-template-columns: minmax(0, 1fr);
 }
 
-.song-detail.is-playing {
-  grid-template-columns: minmax(0, 1fr);
-  transition: grid-template-columns 1.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
 .song-detail .video-player {
-  position: sticky;
-  top: calc(var(--site-header-height) + 2rem);
-  width: min(100%, 28rem);
+  position: relative;
+  align-self: center;
+  width: min(100%, 15.5rem);
   aspect-ratio: 1;
   margin: 0 auto;
   overflow: hidden;
   border-radius: 50%;
   background: var(--song-color, #171717);
-  box-shadow: 0 1rem 2.5rem rgba(20, 12, 24, 0.3);
   transition: width 1.4s cubic-bezier(0.2, 0.8, 0.2, 1), height 1.4s cubic-bezier(0.2, 0.8, 0.2, 1), border-radius 1.4s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
@@ -1092,16 +1118,22 @@ iframe {
 }
 
 .song-lyrics {
+  align-self: center;
   max-width: 58ch;
   min-width: 0;
   line-height: 1.35;
   overflow-wrap: anywhere;
 }
 
+.song-lyrics > :first-child {
+  margin-top: 0;
+}
+
 .song-lyrics p {
   max-width: 48ch;
   margin: 0 0 1.15rem;
   line-height: inherit;
+  white-space: pre-line;
 }
 
 .song-lyrics h1:first-child,
@@ -1327,6 +1359,14 @@ iframe {
   .song-detail .video-player {
     position: static;
   }
+
+  body.song-detail-page.site-effects-ready .video-player:not(.is-playing) .song-card-hover-image {
+    animation: none;
+  }
+
+  body.song-detail-page.site-effects-ready .video-player:not(.is-playing) .song-card-thumbnail {
+    animation: none;
+  }
 }
 
 html[data-theme="dark"] {
@@ -1500,6 +1540,11 @@ html[data-theme="dark"] .site-title:focus-visible {
     animation: none;
   }
 
+  body.song-detail-page.site-effects-ready .video-player:not(.is-playing) .song-card-hover-image,
+  body.song-detail-page.site-effects-ready .video-player:not(.is-playing) .song-card-thumbnail {
+    animation: none;
+  }
+
   body::before,
   .song-card,
   .song-card-grid,
@@ -1509,7 +1554,7 @@ html[data-theme="dark"] .site-title:focus-visible {
   }
 
   body.is-disco-active::before,
-  body.song-detail-page.site-effects-ready::before {
+  body.song-detail-page::before {
     animation: none;
   }
 }

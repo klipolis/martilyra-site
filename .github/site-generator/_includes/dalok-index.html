@@ -11,7 +11,8 @@
         {% assign thumbnail = '/CONTENT/assets/images/' | append: song.image | relative_url %}
       {% endif %}
       {% assign song_title_id = song.path | remove: 'dalok/' | remove: '.md' %}
-      <a class="song-card" href="{{ song.url | relative_url }}" aria-label="{{ song.title }}" style="--song-color: {{ song.image_color | default: '#343434' }}; --song-text-color: {{ song.image_text_color | default: '#ffffff' }}; --song-index: {{ forloop.index0 }}">
+      {% assign song_scale = forloop.index0 | times: 0.05 | plus: 0.7 %}
+      <a class="song-card" href="{{ song.url | relative_url }}" aria-label="{{ song.title }}" style="--song-color: {{ song.image_color | default: '#343434' }}; --song-text-color: {{ song.image_text_color | default: '#ffffff' }}; --song-index: {{ forloop.index0 }}; --song-scale: {{ song_scale }}">
         <img class="song-card-hover-image" src="{{ '/CONTENT/assets/images/' | append: song.image | relative_url }}" alt="" loading="lazy">
         <span class="song-card-content">
           <img class="song-card-thumbnail" src="{{ thumbnail }}" alt="" loading="lazy">

@@ -5,6 +5,7 @@
     initThemeToggle();
     initSongTower();
     initSongCardEffects();
+    initSongPageRays();
     initDelayedEffects();
     markCurrentPage();
     initBlogPagination();
@@ -44,22 +45,45 @@
       }, 1000);
     }
 
+    function curvePointer(value) {
+      var magnitude = Math.min(1, Math.abs(value));
+      return Math.sign(value) * (1 - Math.pow(1 - magnitude, 3));
+    }
+
     tower.addEventListener('pointermove', function (event) {
-      if (prefersReducedMotion || tower.classList.contains('is-expanded')) {
+      if (prefersReducedMotion) {
         return;
       }
 
       var bounds = tower.getBoundingClientRect();
       var pointerX = (event.clientX - bounds.left) / bounds.width * 2 - 1;
       var pointerY = (event.clientY - bounds.top) / bounds.height * 2 - 1;
-      tower.style.setProperty('--tower-tilt-x', (-pointerY * 25) + 'deg');
-      tower.style.setProperty('--tower-tilt-y', (-pointerX * 34) + 'deg');
+      var curvedX = curvePointer(pointerX);
+      var curvedY = curvePointer(pointerY);
+      if (tower.classList.contains('is-expanded')) {
+        return;
+      }
+
+      tower.style.setProperty('--tower-tilt-x', (-curvedY * 25) + 'deg');
+      tower.style.setProperty('--tower-tilt-y', (-curvedX * 34) + 'deg');
+
+      var hoveredCard = event.target.closest('.song-card');
+      if (hoveredCard && tower.contains(hoveredCard)) {
+        var cardBounds = hoveredCard.getBoundingClientRect();
+        var cardX = (event.clientX - (cardBounds.left + cardBounds.width / 2)) / (cardBounds.width / 2);
+        var cardY = (event.clientY - (cardBounds.top + cardBounds.height / 2)) / (cardBounds.height / 2);
+        hoveredCard.style.setProperty('--hover-x', (curvePointer(cardX) * 2.5) + 'rem');
+        hoveredCard.style.setProperty('--hover-y', (curvePointer(cardY) * 2.5) + 'rem');
+      }
     });
 
     tower.addEventListener('pointerleave', function () {
-      hoveredCard = null;
       tower.style.setProperty('--tower-tilt-x', '0deg');
       tower.style.setProperty('--tower-tilt-y', '0deg');
+      cards.forEach(function (card) {
+        card.style.setProperty('--hover-x', '0rem');
+        card.style.setProperty('--hover-y', '0rem');
+      });
       if (tower.classList.contains('is-expanded')) {
         scheduleCollapse();
       }
@@ -107,6 +131,17 @@
         setExpanded(true);
       });
       card.addEventListener('focusout', scheduleCollapse);
+      card.addEventListener('click', function (event) {
+        if (!tower.classList.contains('is-expanded') || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+          return;
+        }
+
+        event.preventDefault();
+        card.classList.add('is-pressed');
+        window.setTimeout(function () {
+          window.location.href = card.href;
+        }, 260);
+      });
     });
 
     window.addEventListener('hashchange', function () {
@@ -116,6 +151,23 @@
     });
 
     setExpanded(window.location.hash === '#dalok-archive');
+  }
+
+  function initSongPageRays() {
+    var player = document.querySelector('.song-detail-page .video-player');
+    if (!player) {
+      return;
+    }
+
+    function updateRays() {
+      var bounds = player.getBoundingClientRect();
+      document.body.style.setProperty('--disco-x', ((bounds.left + bounds.width / 2) / window.innerWidth * 100) + '%');
+      document.body.style.setProperty('--disco-y', ((bounds.top + bounds.height / 2) / window.innerHeight * 100) + '%');
+    }
+
+    updateRays();
+    window.addEventListener('resize', updateRays);
+    player.addEventListener('transitionend', updateRays);
   }
 
   function initSongCardEffects() {
@@ -285,8 +337,8 @@
         var songDetail = player.closest('.song-detail');
         var reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         var initialHeight = player.getBoundingClientRect().height;
+        var firstColumnWidth = parseFloat(window.getComputedStyle(songDetail).gridTemplateColumns.split(' ')[0]) || songDetail.getBoundingClientRect().width;
         facade.replaceWith(iframe);
-        songDetail.classList.add('is-playing');
         if (reducedMotion) {
           player.classList.add('is-playing');
           return;
@@ -295,7 +347,7 @@
         player.style.height = initialHeight + 'px';
         window.requestAnimationFrame(function () {
           player.classList.add('is-playing');
-          player.style.height = (songDetail.getBoundingClientRect().width * 9 / 16) + 'px';
+          player.style.height = (firstColumnWidth * 9 / 16) + 'px';
         });
         player.addEventListener('transitionend', function onPlayerTransitionEnd(event) {
           if (event.propertyName !== 'height') {
