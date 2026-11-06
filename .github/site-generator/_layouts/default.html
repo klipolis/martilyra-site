@@ -22,14 +22,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
 </head>
-<body{% if page.video_id %} class="song-detail-page"{% endif %}>
+<body{% if page.youtube_url %} class="song-detail-page"{% endif %}>
   <header class="site-header">
     <div class="site-header-inner">
       <a class="site-title" href="{{ '/' | relative_url }}">
         <img src="{{ '/CONTENT/assets/images/facebook-profile-portrait.jpg' | relative_url }}" alt="" width="40" height="40">
         <span>{{ site.data.site.title }}</span>
       </a>
-      {% include navigation.html %}
+      {% include header.html %}
     </div>
   </header>
   <main class="main-content{% if page.url == '/' %} song-archive-page{% endif %}">
@@ -44,16 +44,33 @@
           <article class="blog-single">
             <h1 class="blog-single-title">{{ page.title }}</h1>
             <time class="blog-post-date" datetime="{{ page.date | date: '%Y-%m-%d' }}">{{ page.date | date: "%Y. %m. %d." }}</time>
-            {% assign post_thumbnail = page.thumbnail | default: page.image %}
-            {% if post_thumbnail %}
-              {% assign page_image = '/CONTENT/assets/images/' | append: post_thumbnail | relative_url %}
-              <img class="blog-post-image" src="{{ page_image }}" alt="{{ page.title }}" fetchpriority="high">
-            {% endif %}
-            {% include related-song.html post=page %}
-            {% assign page_heading_length = page.title.size | plus: 3 %}
-            {% assign page_heading = page.content | strip | slice: 0, page_heading_length %}
-            {% assign expected_page_heading = "## " | append: page.title %}
-            <div class="blog-single-content{% if page_heading == expected_page_heading %} has-title-heading{% endif %}">{{ content }}</div>
+            {% assign post_thumbnail = page.image %}
+            <div class="blog-post-media">
+              {% if post_thumbnail %}
+                {% assign thumbnail_path = '/CONTENT/assets/images/thumbnails/' | append: post_thumbnail %}
+                {% assign thumbnail_file = site.static_files | where: "relative_path", thumbnail_path | first %}
+                {% if thumbnail_file %}
+                  {% assign page_image = thumbnail_path | relative_url %}
+                {% else %}
+                  {% assign page_image = '/CONTENT/assets/images/' | append: post_thumbnail | relative_url %}
+                {% endif %}
+                <img class="blog-post-image" src="{{ page_image }}" alt="{{ page.title }}" fetchpriority="high">
+              {% endif %}
+              {% include related-song.html post=page %}
+            </div>
+            {% assign page_title = page.title | downcase %}
+            {% assign page_heading = page.content | strip | downcase %}
+            {% assign has_title_heading = false %}
+            {% assign heading_prefixes = "#,##,###" | split: "," %}
+            {% for heading_prefix in heading_prefixes %}
+              {% assign expected_heading = heading_prefix | append: " " | append: page_title %}
+              {% assign heading_length = expected_heading.size %}
+              {% assign content_heading = page_heading | slice: 0, heading_length %}
+              {% if content_heading == expected_heading %}
+                {% assign has_title_heading = true %}
+              {% endif %}
+            {% endfor %}
+            <div class="blog-single-content{% if has_title_heading %} has-title-heading{% endif %}">{{ content }}</div>
           </article>
         </div>
       {% elsif page.url == '/blog/' %}
@@ -61,11 +78,11 @@
           {% include blog-sidebar.html %}
           <section class="blog-archive-content">{{ content }}</section>
         </div>
-      {% elsif page.video_id %}
+      {% elsif page.youtube_url %}
         {% assign video_image = '/CONTENT/assets/images/' | append: page.image | relative_url %}
         <div class="song-detail{% if page.lyrics %} has-lyrics{% endif %}">
           <div class="video-player">
-            <button class="youtube-facade" type="button" data-video-id="{{ page.video_id }}" data-video-title="{{ page.title }}">
+            <button class="youtube-facade" type="button" data-video-url="{{ page.youtube_url }}" data-video-title="{{ page.title }}">
               <img src="{{ video_image }}" alt="{{ page.title }} videó-borító" fetchpriority="high">
               <span class="youtube-play" aria-hidden="true">▶</span>
               <span class="visually-hidden">A {{ page.title }} videó lejátszása</span>

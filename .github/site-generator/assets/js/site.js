@@ -25,6 +25,7 @@
     function setExpanded(expanded) {
       tower.classList.toggle('is-expanded', expanded);
       tower.classList.toggle('is-collapsed', !expanded);
+      tower.setAttribute('aria-expanded', String(expanded));
     }
 
     function clearCollapseTimer() {
@@ -44,7 +45,7 @@
     }
 
     tower.addEventListener('pointermove', function (event) {
-      if (prefersReducedMotion) {
+      if (prefersReducedMotion || tower.classList.contains('is-expanded')) {
         return;
       }
 
@@ -55,40 +56,51 @@
       tower.style.setProperty('--tower-tilt-y', (-pointerX * 24) + 'deg');
     });
 
-    tower.addEventListener('pointerenter', function () {
-      setExpanded(true);
-      scheduleCollapse();
-    });
-
     tower.addEventListener('pointerleave', function () {
       hoveredCard = null;
       tower.style.setProperty('--tower-tilt-x', '0deg');
       tower.style.setProperty('--tower-tilt-y', '0deg');
+      if (tower.classList.contains('is-expanded')) {
+        scheduleCollapse();
+      }
+    });
+
+    tower.addEventListener('click', function (event) {
+      if (tower.classList.contains('is-expanded')) {
+        return;
+      }
+
+      if (event.target.closest('.song-card')) {
+        event.preventDefault();
+      }
+      setExpanded(true);
       scheduleCollapse();
+    });
+
+    tower.addEventListener('keydown', function (event) {
+      if (event.target !== tower || (event.key !== 'Enter' && event.key !== ' ')) {
+        return;
+      }
+
+      event.preventDefault();
+      setExpanded(!tower.classList.contains('is-expanded'));
+      if (tower.classList.contains('is-expanded')) {
+        scheduleCollapse();
+      } else {
+        clearCollapseTimer();
+      }
     });
 
     cards.forEach(function (card) {
       card.addEventListener('pointerenter', function () {
         hoveredCard = card;
         clearCollapseTimer();
-        setExpanded(true);
-      });
-      card.addEventListener('pointermove', function (event) {
-        if (prefersReducedMotion) {
-          return;
-        }
-
-        var bounds = card.getBoundingClientRect();
-        var pointerX = (event.clientX - bounds.left) / bounds.width * 2 - 1;
-        var pointerY = (event.clientY - bounds.top) / bounds.height * 2 - 1;
-        card.style.setProperty('--card-tilt-x', (-pointerY * 16) + 'deg');
-        card.style.setProperty('--card-tilt-y', (pointerX * 16) + 'deg');
       });
       card.addEventListener('pointerleave', function () {
         hoveredCard = null;
-        card.style.setProperty('--card-tilt-x', '0deg');
-        card.style.setProperty('--card-tilt-y', '0deg');
-        scheduleCollapse();
+        if (tower.classList.contains('is-expanded')) {
+          scheduleCollapse();
+        }
       });
       card.addEventListener('focusin', function () {
         clearCollapseTimer();
@@ -145,13 +157,28 @@
       card.addEventListener('pointerenter', function () {
         activate(card);
       });
+      card.addEventListener('pointermove', function (event) {
+        var prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (prefersReducedMotion) {
+          return;
+        }
+        var bounds = card.getBoundingClientRect();
+        var pointerX = (event.clientX - bounds.left) / bounds.width * 2 - 1;
+        var pointerY = (event.clientY - bounds.top) / bounds.height * 2 - 1;
+        card.style.setProperty('--card-tilt-x', (-pointerY * 16) + 'deg');
+        card.style.setProperty('--card-tilt-y', (pointerX * 16) + 'deg');
+      });
       card.addEventListener('pointerleave', function () {
+        card.style.setProperty('--card-tilt-x', '0deg');
+        card.style.setProperty('--card-tilt-y', '0deg');
         deactivate(card);
       });
       card.addEventListener('focusin', function () {
         activate(card);
       });
       card.addEventListener('focusout', function (event) {
+        card.style.setProperty('--card-tilt-x', '0deg');
+        card.style.setProperty('--card-tilt-y', '0deg');
         if (!event.relatedTarget || !card.contains(event.relatedTarget)) {
           deactivate(card);
         }
@@ -238,10 +265,15 @@
   }
 
   function initVideoFacades() {
-    var facades = document.querySelectorAll('.youtube-facade[data-video-id]');
+    var facades = document.querySelectorAll('.youtube-facade[data-video-url]');
     facades.forEach(function (facade) {
       facade.addEventListener('click', function () {
-        var videoId = facade.getAttribute('data-video-id');
+        var videoUrl = facade.getAttribute('data-video-url');
+        var videoId = getYouTubeVideoId(videoUrl);
+        if (!videoId) {
+          console.error('Invalid YouTube URL for video facade:', videoUrl);
+          return;
+        }
         var title = facade.getAttribute('data-video-title');
         var iframe = document.createElement('iframe');
         iframe.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(videoId) + '?autoplay=1';
@@ -253,6 +285,28 @@
         facade.replaceWith(iframe);
       });
     });
+  }
+
+  function getYouTubeVideoId(videoUrl) {
+    try {
+      var url = new URL(videoUrl);
+      var host = url.hostname.toLowerCase().replace(/^www\./, '');
+      var videoId;
+
+      if (host === 'youtu.be') {
+        videoId = url.pathname.split('/').filter(Boolean)[0];
+      } else if (host === 'youtube.com' || host === 'm.youtube.com' || host === 'youtube-nocookie.com') {
+        videoId = url.searchParams.get('v');
+        if (!videoId) {
+          var pathMatch = url.pathname.match(/^\/(?:embed|shorts|live)\/([^/]+)/);
+          videoId = pathMatch && pathMatch[1];
+        }
+      }
+
+      return videoId && /^[A-Za-z0-9_-]{11}$/.test(videoId) ? videoId : null;
+    } catch (error) {
+      return null;
+    }
   }
 
   function markCurrentPage() {

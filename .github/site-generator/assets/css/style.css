@@ -7,6 +7,15 @@
   initial-value: 0deg;
 }
 
+.song-tower:focus-visible {
+  outline: 3px solid #0033cc;
+  outline-offset: 4px;
+}
+
+.song-tower.is-expanded .song-card-grid {
+  transform: none;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -17,7 +26,7 @@
 
 body {
   margin: 0;
-  font-family: 'Lato', Verdana, Tahoma, Arial, Helvetica, sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: 14px;
   line-height: 1.6;
   color: #151515;
@@ -123,14 +132,12 @@ a[href^="https://"]::after {
 
 .blog-sidebar {
   grid-area: sidebar;
+  position: sticky;
+  top: calc(var(--site-header-height) + 1rem);
   min-width: 0;
   padding: 1.25rem;
   border-radius: 0.75rem;
   background: #f7f3f5;
-}
-
-.about-author h2 {
-  margin: 0 0 0.75rem;
 }
 
 .about-author img {
@@ -171,8 +178,7 @@ a[href^="https://"]::after {
   transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.song-tower.is-collapsed .song-card-grid,
-.song-tower.is-expanded .song-card-grid {
+.song-tower.is-collapsed .song-card-grid {
   transform: rotateX(var(--tower-tilt-x, 0deg)) rotateY(var(--tower-tilt-y, 0deg));
 }
 
@@ -205,6 +211,11 @@ a[href^="https://"]::after {
   transform: perspective(900px) rotateX(var(--card-tilt-x, 0deg)) rotateY(var(--card-tilt-y, 0deg));
 }
 
+.song-tower:focus-visible {
+  outline: 3px solid #0033cc;
+  outline-offset: 4px;
+}
+
 .song-tower.is-expanded .song-card:hover,
 .song-tower.is-expanded .song-card:focus-visible {
   transform: perspective(900px) rotateX(var(--card-tilt-x, 0deg)) rotateY(var(--card-tilt-y, 0deg)) translateZ(1.25rem);
@@ -234,12 +245,12 @@ body::before {
   z-index: 1;
   inset: 0;
   background:
-    radial-gradient(ellipse at var(--disco-x, 50%) var(--disco-y, 50%), rgba(255, 255, 255, 0.08), transparent 22rem),
+    radial-gradient(ellipse at var(--disco-x, 50%) var(--disco-y, 50%), rgba(255, 255, 255, 0.14), transparent 22rem),
     repeating-conic-gradient(
       from var(--disco-angle, 0deg) at var(--disco-x, 50%) var(--disco-y, 50%),
-      rgba(255, 85, 145, 0.07) 0deg 5deg,
+      rgba(255, 85, 145, 0.14) 0deg 5deg,
       transparent 5deg 15deg,
-      rgba(75, 155, 255, 0.06) 15deg 20deg,
+      rgba(75, 155, 255, 0.12) 15deg 20deg,
       transparent 20deg 30deg
     );
   content: "";
@@ -250,7 +261,7 @@ body::before {
 }
 
 body.is-disco-active::before {
-  opacity: 0.32;
+  opacity: 0.48;
   animation: disco-ray-pulse 9s ease-in-out infinite alternate, disco-ray-spin 100s linear infinite;
 }
 
@@ -260,17 +271,17 @@ body.song-detail-page {
 }
 
 body.song-detail-page.site-effects-ready::before {
-  opacity: 0.3;
+  opacity: 0.42;
   animation: disco-ray-pulse 12s ease-in-out infinite alternate, disco-ray-spin 100s linear infinite;
 }
 
 @keyframes disco-ray-pulse {
   from {
-    opacity: 0.22;
+    opacity: 0.34;
   }
 
   to {
-    opacity: 0.38;
+    opacity: 0.58;
   }
 }
 
@@ -438,6 +449,22 @@ body.song-detail-page.site-effects-ready::before {
 }
 .social-link.tiktok:hover {
   color: #fe2c55;
+}
+
+.social-link.apple-music {
+  color: #fa233b;
+}
+
+.social-link.spotify {
+  color: #1db954;
+}
+
+.social-link.spotify svg,
+.related-song-platform.spotify svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-width: 1.7;
 }
 
 /* --- Pre / Code blocks (preserve family-tree ASCII art and anchors) --- */
@@ -686,37 +713,73 @@ iframe {
 }
 
 .related-song {
-  margin-top: 1rem;
-}
-
-.related-song-link,
-.related-song-link:visited {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 0.85rem;
-  color: inherit;
-  font-size: 1.05rem;
-  font-weight: bold;
-  text-decoration: none;
+  gap: 0.65rem;
 }
 
-.related-song-link:hover {
-  text-decoration: underline;
+.related-song-card {
+  width: 10rem;
+  flex: 0 0 10rem;
+  transform: perspective(900px) rotateX(var(--card-tilt-x, 0deg)) rotateY(var(--card-tilt-y, 0deg));
 }
 
-.related-song-link img {
-  display: block;
-  width: 4rem;
-  height: 4rem;
-  flex: 0 0 4rem;
-  margin: 0;
+.related-song-card .song-card-thumbnail {
+  width: 3.5rem;
+  height: 3.5rem;
+}
+
+.related-song-card .song-card-title {
+  font-size: 12px;
+}
+
+.related-song-card:hover,
+.related-song-card:focus-visible {
+  transform: perspective(900px) rotateX(var(--card-tilt-x, 0deg)) rotateY(var(--card-tilt-y, 0deg)) translateZ(1.25rem);
+}
+
+.related-song-platforms {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.related-song-platform {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
   border-radius: 50%;
-  object-fit: cover;
 }
 
-.related-song-link:focus-visible {
-  outline: 3px solid #9c3158;
-  outline-offset: 3px;
+.related-song-platform svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: currentColor;
+}
+
+.related-song-platform.youtube {
+  color: #ff0000;
+}
+
+.related-song-platform.spotify {
+  color: #1db954;
+}
+
+.blog-post-media {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.blog-post-media .blog-post-image {
+  width: min(100%, 10rem);
+  height: 10rem;
+  max-height: none;
+  margin: 0;
+  object-fit: cover;
 }
 
 /* --- Full-content blog archive --- */
@@ -738,8 +801,8 @@ iframe {
   margin-top: 0;
 }
 
-.blog-single-content.has-title-heading > h2:first-of-type,
-.blog-post-content.has-title-heading > h2:first-of-type {
+.blog-single-content.has-title-heading > :is(h1, h2, h3):first-child,
+.blog-post-content.has-title-heading > :is(h1, h2, h3):first-child {
   display: none;
 }
 
@@ -892,12 +955,14 @@ iframe {
 .song-lyrics {
   max-width: 58ch;
   min-width: 0;
+  line-height: 1.35;
   overflow-wrap: anywhere;
 }
 
 .song-lyrics p {
   max-width: 48ch;
-  white-space: pre-line;
+  margin: 0 0 1.15rem;
+  line-height: inherit;
 }
 
 .song-lyrics h1:first-child,
@@ -1096,6 +1161,7 @@ iframe {
   }
 
   .blog-sidebar {
+    position: static;
     padding: 1rem;
   }
 
@@ -1180,6 +1246,15 @@ html[data-theme="dark"] .social-link.tiktok {
 
 html[data-theme="dark"] .social-link.tiktok:hover {
   color: #ff6b8a;
+}
+
+html[data-theme="dark"] .social-link.apple-music {
+  color: #ff6374;
+}
+
+html[data-theme="dark"] .social-link.spotify,
+html[data-theme="dark"] .related-song-platform.spotify {
+  color: #1ed760;
 }
 
 html[data-theme="dark"] .theme-toggle {

@@ -1,8 +1,8 @@
-<section class="song-tower is-collapsed" id="dalok-archive" data-song-tower>
+<section class="song-tower is-collapsed" id="dalok-archive" data-song-tower tabindex="0" aria-label="Dalok lemezgyűjteménye" aria-expanded="false">
   <div class="song-card-grid">
   {% assign songs = site.pages | where_exp: "song", "song.path contains 'dalok/'" | sort: "title" %}
   {% for song in songs %}
-    {% if song.video_id %}
+    {% if song.youtube_url %}
       {% assign thumbnail_path = '/CONTENT/assets/images/thumbnails/' | append: song.image %}
       {% assign thumbnail_file = site.static_files | where: "relative_path", thumbnail_path | first %}
       {% if thumbnail_file %}

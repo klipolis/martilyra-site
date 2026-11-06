@@ -7,22 +7,33 @@
         <a class="blog-post-date-link" href="{{ post.url | relative_url }}">
           <time class="blog-post-date" datetime="{{ post.date | date: '%Y-%m-%d' }}">{{ post.date | date: "%Y. %m. %d." }}</time>
         </a>
-        {% assign post_thumbnail = post.thumbnail | default: post.image %}
-        {% if post_thumbnail %}
-          {% assign thumbnail_path = '/CONTENT/assets/images/thumbnails/' | append: post_thumbnail %}
-          {% assign thumbnail_file = site.static_files | where: "relative_path", thumbnail_path | first %}
-          {% if thumbnail_file %}
-            {% assign image = thumbnail_path | relative_url %}
-          {% else %}
-            {% assign image = '/CONTENT/assets/images/' | append: post_thumbnail | relative_url %}
+        {% assign post_thumbnail = post.image %}
+        <div class="blog-post-media">
+          {% if post_thumbnail %}
+            {% assign thumbnail_path = '/CONTENT/assets/images/thumbnails/' | append: post_thumbnail %}
+            {% assign thumbnail_file = site.static_files | where: "relative_path", thumbnail_path | first %}
+            {% if thumbnail_file %}
+              {% assign image = thumbnail_path | relative_url %}
+            {% else %}
+              {% assign image = '/CONTENT/assets/images/' | append: post_thumbnail | relative_url %}
+            {% endif %}
+            <img class="blog-post-image" src="{{ image }}" alt="{{ post.title }}" loading="lazy">
           {% endif %}
-          <img class="blog-post-image" src="{{ image }}" alt="{{ post.title }}" loading="lazy">
-        {% endif %}
-        {% include related-song.html post=post %}
-        {% assign post_heading_length = post.title.size | plus: 3 %}
-        {% assign post_heading = post.content | strip | slice: 0, post_heading_length %}
-        {% assign expected_post_heading = "## " | append: post.title %}
-        <div class="blog-post-content{% if post_heading == expected_post_heading %} has-title-heading{% endif %}">{{ post.content | markdownify }}</div>
+          {% include related-song.html post=post %}
+        </div>
+        {% assign post_title = post.title | downcase %}
+        {% assign post_heading = post.content | strip | downcase %}
+        {% assign has_title_heading = false %}
+        {% assign heading_prefixes = "#,##,###" | split: "," %}
+        {% for heading_prefix in heading_prefixes %}
+          {% assign expected_heading = heading_prefix | append: " " | append: post_title %}
+          {% assign heading_length = expected_heading.size %}
+          {% assign content_heading = post_heading | slice: 0, heading_length %}
+          {% if content_heading == expected_heading %}
+            {% assign has_title_heading = true %}
+          {% endif %}
+        {% endfor %}
+        <div class="blog-post-content{% if has_title_heading %} has-title-heading{% endif %}">{{ post.content | markdownify }}</div>
       </article>
     {% endif %}
   {% endfor %}
