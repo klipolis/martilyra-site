@@ -64,6 +64,9 @@ jobs:
           from pathlib import Path
 
           base_path = os.environ["BASE_PATH"].rstrip("/")
+          relative_asset_pattern = re.compile(
+              r"""(?P<prefix>\b(?:href|src)=["'])(?:\.\./)+assets/"""
+          )
           if base_path:
               base_segment = re.escape(base_path.lstrip("/"))
               pattern = re.compile(
@@ -71,13 +74,18 @@ jobs:
                   + base_segment
                   + r"""(?:/|["']))"""
               )
-              for html_file in Path("_site").rglob("*.html"):
-                  html = html_file.read_text(encoding="utf-8")
+          for html_file in Path("_site").rglob("*.html"):
+              html = html_file.read_text(encoding="utf-8")
+              html = relative_asset_pattern.sub(
+                  lambda match: match.group("prefix") + base_path + "/CONTENT/assets/",
+                  html,
+              )
+              if base_path:
                   html = pattern.sub(
                       lambda match: match.group("prefix") + base_path + "/",
                       html,
                   )
-                  html_file.write_text(html, encoding="utf-8")
+              html_file.write_text(html, encoding="utf-8")
           PY
           # Make external links open in new tab
           find _site -name "*.html" -type f -exec sed -i -E 's|<a href="(https?://[^"]+)"([^>]*)>|<a href="\1"\2 target="_blank" rel="noopener noreferrer">|g' {} +
