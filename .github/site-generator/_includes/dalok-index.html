@@ -1,8 +1,5 @@
 <section class="song-tower is-collapsed" id="dalok-archive" data-song-tower>
-  <button class="song-tower-toggle" type="button" aria-expanded="false" aria-label="Dalok megnyitása" disabled>
-    <span>Dalok megnyitása</span>
-  </button>
-  <div class="song-card-grid" aria-hidden="true">
+  <div class="song-card-grid">
   {% assign songs = site.pages | where_exp: "song", "song.path contains 'dalok/'" | sort: "title" %}
   {% for song in songs %}
     {% if song.video_id %}

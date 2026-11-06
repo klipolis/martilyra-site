@@ -17,61 +17,93 @@
       return;
     }
 
-    var toggle = tower.querySelector('.song-tower-toggle');
-    var grid = tower.querySelector('.song-card-grid');
     var cards = Array.prototype.slice.call(tower.querySelectorAll('.song-card'));
     var prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var collapseTimer;
+    var hoveredCard = null;
 
     function setExpanded(expanded) {
       tower.classList.toggle('is-expanded', expanded);
       tower.classList.toggle('is-collapsed', !expanded);
-      toggle.setAttribute('aria-expanded', String(expanded));
-      toggle.setAttribute('aria-label', expanded ? 'Dalok összecsukása' : 'Dalok megnyitása');
-      toggle.querySelector('span').textContent = expanded ? 'Dalok összecsukása' : 'Dalok megnyitása';
-      grid.setAttribute('aria-hidden', String(!expanded));
-      cards.forEach(function (card) {
-        if (expanded) {
-          card.removeAttribute('tabindex');
-        } else {
-          card.setAttribute('tabindex', '-1');
-        }
-      });
     }
 
-    toggle.addEventListener('click', function () {
-      setExpanded(!tower.classList.contains('is-expanded'));
-    });
+    function clearCollapseTimer() {
+      window.clearTimeout(collapseTimer);
+    }
 
-    tower.addEventListener('click', function (event) {
-      if (tower.classList.contains('is-ready') && !tower.classList.contains('is-expanded') && !event.target.closest('.song-tower-toggle')) {
-        setExpanded(true);
-      }
-    });
+    function scheduleCollapse() {
+      clearCollapseTimer();
+      collapseTimer = window.setTimeout(function () {
+        var focusedCard = cards.some(function (card) {
+          return card.contains(document.activeElement);
+        });
+        if (!hoveredCard && !focusedCard) {
+          setExpanded(false);
+        }
+      }, 1000);
+    }
 
     tower.addEventListener('pointermove', function (event) {
-      if (prefersReducedMotion || !tower.classList.contains('is-collapsed') || !tower.classList.contains('is-ready')) {
+      if (prefersReducedMotion) {
         return;
       }
 
       var bounds = tower.getBoundingClientRect();
       var pointerX = (event.clientX - bounds.left) / bounds.width * 2 - 1;
       var pointerY = (event.clientY - bounds.top) / bounds.height * 2 - 1;
-      tower.style.setProperty('--tower-tilt-x', (-pointerY * 9) + 'deg');
-      tower.style.setProperty('--tower-tilt-y', (-pointerX * 12) + 'deg');
+      tower.style.setProperty('--tower-tilt-x', (-pointerY * 18) + 'deg');
+      tower.style.setProperty('--tower-tilt-y', (-pointerX * 24) + 'deg');
+    });
+
+    tower.addEventListener('pointerenter', function () {
+      setExpanded(true);
+      scheduleCollapse();
     });
 
     tower.addEventListener('pointerleave', function () {
+      hoveredCard = null;
       tower.style.setProperty('--tower-tilt-x', '0deg');
       tower.style.setProperty('--tower-tilt-y', '0deg');
+      scheduleCollapse();
+    });
+
+    cards.forEach(function (card) {
+      card.addEventListener('pointerenter', function () {
+        hoveredCard = card;
+        clearCollapseTimer();
+        setExpanded(true);
+      });
+      card.addEventListener('pointermove', function (event) {
+        if (prefersReducedMotion) {
+          return;
+        }
+
+        var bounds = card.getBoundingClientRect();
+        var pointerX = (event.clientX - bounds.left) / bounds.width * 2 - 1;
+        var pointerY = (event.clientY - bounds.top) / bounds.height * 2 - 1;
+        card.style.setProperty('--card-tilt-x', (-pointerY * 16) + 'deg');
+        card.style.setProperty('--card-tilt-y', (pointerX * 16) + 'deg');
+      });
+      card.addEventListener('pointerleave', function () {
+        hoveredCard = null;
+        card.style.setProperty('--card-tilt-x', '0deg');
+        card.style.setProperty('--card-tilt-y', '0deg');
+        scheduleCollapse();
+      });
+      card.addEventListener('focusin', function () {
+        clearCollapseTimer();
+        setExpanded(true);
+      });
+      card.addEventListener('focusout', scheduleCollapse);
     });
 
     window.addEventListener('hashchange', function () {
-      if (tower.classList.contains('is-ready') && window.location.hash === '#dalok-archive') {
+      if (window.location.hash === '#dalok-archive') {
         setExpanded(true);
       }
     });
 
-    setExpanded(false);
+    setExpanded(window.location.hash === '#dalok-archive');
   }
 
   function initSongCardEffects() {
@@ -128,18 +160,9 @@
   }
 
   function initDelayedEffects() {
-    var towers = Array.prototype.slice.call(document.querySelectorAll('[data-song-tower]'));
     var prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     window.setTimeout(function () {
       document.body.classList.add('site-effects-ready');
-      towers.forEach(function (tower) {
-        tower.classList.add('is-ready');
-        var toggle = tower.querySelector('.song-tower-toggle');
-        toggle.disabled = false;
-        if (window.location.hash === '#dalok-archive' && !tower.classList.contains('is-expanded')) {
-          toggle.click();
-        }
-      });
     }, prefersReducedMotion ? 0 : 5000);
   }
 
