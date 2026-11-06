@@ -89,20 +89,22 @@
         {% endif %}
         {% assign song_title_id = page.path | remove: 'dalok/' | remove: '.md' | slugify %}
         <div class="song-detail{% if page.lyrics %} has-lyrics{% endif %}">
-          <div class="video-player" style="--song-color: {{ page.image_color | default: '#343434' }}; --song-text-color: {{ page.image_text_color | default: '#ffffff' }}">
-            <button class="youtube-facade song-card" type="button" data-video-url="{{ page.youtube_url }}" data-video-title="{{ page.title }}" aria-label="{{ page.title }} videójának lejátszása">
-              <img class="song-card-hover-image" src="{{ video_image }}" alt="" fetchpriority="high">
-              <span class="song-card-content">
-                <img class="song-card-thumbnail" src="{{ video_thumbnail }}" alt="" fetchpriority="high">
-                <svg class="song-card-title" viewBox="0 0 240 240" aria-hidden="true" focusable="false">
-                  <defs>
-                    <path id="song-title-path-{{ song_title_id }}" d="M 22,120 A 98,98 0 0,0 218,120"></path>
-                  </defs>
-                  <text><textPath href="#song-title-path-{{ song_title_id }}" startOffset="50%" text-anchor="middle">{{ page.title }}</textPath></text>
-                </svg>
-              </span>
-              <span class="youtube-play" aria-hidden="true">▶</span>
-            </button>
+          <div class="song-video-slot">
+            <div class="video-player" style="--song-color: {{ page.image_color | default: '#343434' }}; --song-text-color: {{ page.image_text_color | default: '#ffffff' }}">
+              <button class="youtube-facade song-card" type="button" data-video-url="{{ page.youtube_url }}" data-video-title="{{ page.title }}" aria-label="{{ page.title }} videójának lejátszása">
+                <img class="song-card-hover-image" src="{{ video_image }}" alt="" fetchpriority="high">
+                <span class="song-card-content">
+                  <img class="song-card-thumbnail" src="{{ video_thumbnail }}" alt="" fetchpriority="high">
+                  <svg class="song-card-title" viewBox="0 0 240 240" aria-hidden="true" focusable="false">
+                    <defs>
+                      <path id="song-title-path-{{ song_title_id }}" d="M 22,120 A 98,98 0 0,0 218,120"></path>
+                    </defs>
+                    <text><textPath href="#song-title-path-{{ song_title_id }}" startOffset="50%" text-anchor="middle">{{ page.title }}</textPath></text>
+                  </svg>
+                </span>
+                <span class="youtube-play" aria-hidden="true">▶</span>
+              </button>
+            </div>
           </div>
           {% if page.lyrics %}
             <article class="song-lyrics">{{ content }}</article>

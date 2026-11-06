@@ -1,7 +1,7 @@
 ---
 title: Hazatérsz
 date: 2024-06-16
-image: hazateres.jpg
+image: hazatersz.jpg
 songs: hazatertes
 ---
 

@@ -10,7 +10,7 @@
           {% assign folder_label = folder_index.title | default: folder | capitalize %}
           {% assign folder_url = folder_index.url %}
           {% if folder == "dalok" %}
-            {% assign folder_url = site.data.site.dalok_url %}
+            {% assign folder_url = site.data.site.dalok_url | append: '#dalok-archive' %}
           {% endif %}
           <li>
             <a href="{{ folder_url | relative_url }}" aria-label="{{ folder_label }}">

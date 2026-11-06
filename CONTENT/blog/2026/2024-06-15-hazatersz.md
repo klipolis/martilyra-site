@@ -1,7 +1,7 @@
 ---
 title: Hazatérsz - holnap
 date: 2024-06-15
-image: hazateres.jpg
+image: hazatersz.jpg
 songs: hazatertes
 ---
 

@@ -6,6 +6,7 @@
     initSongTower();
     initSongCardEffects();
     initSongPageRays();
+    initMobileMiniPlayer();
     initDelayedEffects();
     markCurrentPage();
     initBlogPagination();
@@ -68,6 +69,12 @@
       tower.style.setProperty('--tower-tilt-y', (-curvedX * 34) + 'deg');
 
       var hoveredCard = event.target.closest('.song-card');
+      cards.forEach(function (card) {
+        if (card !== hoveredCard) {
+          card.style.setProperty('--hover-x', '0rem');
+          card.style.setProperty('--hover-y', '0rem');
+        }
+      });
       if (hoveredCard && tower.contains(hoveredCard)) {
         var cardBounds = hoveredCard.getBoundingClientRect();
         var cardX = (event.clientX - (cardBounds.left + cardBounds.width / 2)) / (cardBounds.width / 2);
@@ -140,7 +147,7 @@
         card.classList.add('is-pressed');
         window.setTimeout(function () {
           window.location.href = card.href;
-        }, 260);
+        }, 420);
       });
     });
 
@@ -149,6 +156,14 @@
         setExpanded(true);
       }
     });
+
+    var archiveLink = document.querySelector('.primary-nav a[href$="#dalok-archive"]');
+    if (archiveLink) {
+      archiveLink.addEventListener('click', function () {
+        setExpanded(true);
+        clearCollapseTimer();
+      });
+    }
 
     setExpanded(window.location.hash === '#dalok-archive');
   }
@@ -167,7 +182,36 @@
 
     updateRays();
     window.addEventListener('resize', updateRays);
+    window.addEventListener('scroll', updateRays, { passive: true });
     player.addEventListener('transitionend', updateRays);
+  }
+
+  function initMobileMiniPlayer() {
+    var player = document.querySelector('.song-detail-page .video-player');
+    var slot = document.querySelector('.song-detail-page .song-video-slot');
+    if (!player || !slot) {
+      return;
+    }
+
+    var mobileViewport = window.matchMedia('(max-width: 720px)');
+
+    function updateMiniPlayer() {
+      if (!mobileViewport.matches) {
+        player.classList.remove('is-mini');
+        return;
+      }
+
+      player.classList.toggle('is-mini', slot.getBoundingClientRect().bottom < 12);
+    }
+
+    window.addEventListener('scroll', updateMiniPlayer, { passive: true });
+    window.addEventListener('resize', updateMiniPlayer);
+    if (mobileViewport.addEventListener) {
+      mobileViewport.addEventListener('change', updateMiniPlayer);
+    } else if (mobileViewport.addListener) {
+      mobileViewport.addListener(updateMiniPlayer);
+    }
+    updateMiniPlayer();
   }
 
   function initSongCardEffects() {
@@ -336,25 +380,28 @@
         var player = facade.closest('.video-player');
         var songDetail = player.closest('.song-detail');
         var reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        var initialHeight = player.getBoundingClientRect().height;
+        var slot = player.closest('.song-video-slot');
+        var initialHeight = slot.getBoundingClientRect().height;
         var firstColumnWidth = parseFloat(window.getComputedStyle(songDetail).gridTemplateColumns.split(' ')[0]) || songDetail.getBoundingClientRect().width;
         facade.replaceWith(iframe);
         if (reducedMotion) {
           player.classList.add('is-playing');
+          slot.classList.add('is-playing');
           return;
         }
 
-        player.style.height = initialHeight + 'px';
+        slot.style.height = initialHeight + 'px';
         window.requestAnimationFrame(function () {
           player.classList.add('is-playing');
-          player.style.height = (firstColumnWidth * 9 / 16) + 'px';
+          slot.classList.add('is-playing');
+          slot.style.height = (firstColumnWidth * 9 / 16) + 'px';
         });
-        player.addEventListener('transitionend', function onPlayerTransitionEnd(event) {
+        slot.addEventListener('transitionend', function onPlayerTransitionEnd(event) {
           if (event.propertyName !== 'height') {
             return;
           }
-          player.style.removeProperty('height');
-          player.removeEventListener('transitionend', onPlayerTransitionEnd);
+          slot.style.removeProperty('height');
+          slot.removeEventListener('transitionend', onPlayerTransitionEnd);
         });
       });
     });

@@ -1,7 +1,7 @@
 ---
 title: Hazatérsz
 youtube_url: https://www.youtube.com/watch?v=VScWWlzQMPY
-image: hazateres.jpg
+image: hazatersz.jpg
 image_color: "#B53263"
 image_text_color: "#FFFFFF"
 lyrics: true

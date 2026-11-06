@@ -256,6 +256,46 @@ a[href^="https://"]::after {
   transform: translate(-50%, -50%) translateZ(-0.35rem) scale(1.3);
 }
 
+.song-tower .song-card,
+.song-tower .song-card:hover,
+.song-tower .song-card:focus-visible {
+  box-shadow: none;
+}
+
+.song-tower .song-card-title {
+  letter-spacing: normal;
+}
+
+.song-tower.is-collapsed .song-card.is-pressed {
+  transform: translate(-50%, -50%) rotateX(34deg) rotateZ(calc(var(--song-index, 0) * 2deg)) translateZ(calc(var(--song-index, 0) * 0.55rem - 0.75rem)) translateX(var(--hover-x, 0rem)) translateY(var(--hover-y, 0rem)) scale(var(--song-scale, 1)) scale(0.94);
+}
+
+.song-tower.is-expanded .song-card.is-pressed {
+  transform: perspective(700px) rotateX(calc(12deg + var(--card-tilt-x, 0deg))) rotateY(var(--card-tilt-y, 0deg)) rotateZ(calc((var(--song-index, 0) - 3.5) * 2deg)) translateZ(-0.75rem) scale(0.94);
+}
+
+.song-tower .song-card.is-pressed::after {
+  animation: pin-press 420ms ease-out forwards;
+}
+
+@keyframes pin-press {
+  0% {
+    transform: translate(-50%, -50%) translateZ(1.2rem) scale(0.75);
+  }
+
+  40% {
+    transform: translate(-50%, -50%) translateZ(1.2rem) scale(1.2);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) translateZ(-0.4rem) scale(0.85);
+  }
+}
+
+body.site-effects-ready .song-tower .song-card-thumbnail {
+  animation: song-thumbnail-breathe 6s ease-in-out infinite;
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -1039,6 +1079,7 @@ iframe {
 .song-detail {
   display: grid;
   grid-template-columns: minmax(15.5rem, 0.75fr) minmax(0, 1.25fr);
+  min-height: calc(100svh - var(--site-header-height) - 4rem);
   align-items: center;
   gap: 1.5rem;
 }
@@ -1047,21 +1088,32 @@ iframe {
   grid-template-columns: minmax(0, 1fr);
 }
 
-.song-detail .video-player {
-  position: relative;
-  align-self: center;
+.song-video-slot {
+  position: sticky;
+  top: calc(50vh - 7.75rem);
+  align-self: start;
   width: min(100%, 15.5rem);
   aspect-ratio: 1;
   margin: 0 auto;
+  transition: width 1.4s cubic-bezier(0.2, 0.8, 0.2, 1), height 1.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.song-video-slot.is-playing {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+}
+
+.song-detail .video-player {
+  position: relative;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
   border-radius: 50%;
   background: var(--song-color, #171717);
-  transition: width 1.4s cubic-bezier(0.2, 0.8, 0.2, 1), height 1.4s cubic-bezier(0.2, 0.8, 0.2, 1), border-radius 1.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition: border-radius 1.4s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.song-detail .video-player.is-playing {
-  width: 100%;
-  aspect-ratio: 16 / 9;
+.song-video-slot.is-playing .video-player {
   border-radius: 0.75rem;
 }
 
@@ -1348,25 +1400,41 @@ iframe {
 
   .song-detail,
   .song-detail:not(.has-lyrics) {
+    min-height: 0;
     grid-template-columns: minmax(0, 1fr);
     gap: 0.75rem;
+  }
+
+  .song-video-slot {
+    position: relative;
+    top: auto;
+    width: min(100%, 15.5rem);
+  }
+
+  .song-video-slot.is-playing {
+    width: 100%;
   }
 
   .song-lyrics {
     max-width: none;
   }
 
-  .song-detail .video-player {
-    position: static;
+  .song-detail .video-player.is-mini {
+    position: fixed;
+    z-index: 40;
+    top: 0.65rem;
+    right: 0.65rem;
+    width: 5rem;
+    height: 5rem;
+    border: 0.15rem solid rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    box-shadow: 0 0.35rem 1.2rem rgba(0, 0, 0, 0.45);
   }
 
-  body.song-detail-page.site-effects-ready .video-player:not(.is-playing) .song-card-hover-image {
-    animation: none;
+  .song-detail .video-player.is-mini .youtube-facade {
+    border-radius: 50%;
   }
 
-  body.song-detail-page.site-effects-ready .video-player:not(.is-playing) .song-card-thumbnail {
-    animation: none;
-  }
 }
 
 html[data-theme="dark"] {
@@ -1551,6 +1619,11 @@ html[data-theme="dark"] .site-title:focus-visible {
   .song-detail,
   .song-detail .video-player {
     transition: none;
+  }
+
+  .song-tower .song-card-thumbnail,
+  .song-tower .song-card.is-pressed::after {
+    animation: none;
   }
 
   body.is-disco-active::before,
