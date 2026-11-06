@@ -1,12 +1,3 @@
----
-title: Dalok
-layout: default
----
-
-# Marti Lyra dalai
-
-Az alábbi dalok a Marti Lyra YouTube csatornáról:
-
 <div class="content-card-grid">
   {% assign songs = site.pages | where_exp: "song", "song.path contains 'dalok/'" | sort: "title" %}
   {% for song in songs %}

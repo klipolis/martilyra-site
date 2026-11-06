@@ -37,6 +37,10 @@ jobs:
           rsync -a --exclude='/assets/' CONTENT/ site/
           mkdir -p site/CONTENT
           cp -R CONTENT/assets site/CONTENT/
+          mkdir -p site/blog
+          cp .github/site-generator/pages/blog.md site/blog/index.md
+          mkdir -p site/dalok
+          cp .github/site-generator/pages/dalok.md site/dalok/index.md
           cp -R .github/site-generator/_layouts .github/site-generator/_includes .github/site-generator/_data site/
           mkdir -p site/assets
           cp -R .github/site-generator/assets/. site/assets/

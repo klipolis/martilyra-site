@@ -37,7 +37,54 @@
     }
 
     markCurrentPage();
+    initBlogPagination();
     initVideoFacades();
+  }
+
+  function initBlogPagination() {
+    var list = document.querySelector('.blog-post-list');
+    var pagination = document.querySelector('.blog-pagination');
+    if (!list || !pagination) {
+      return;
+    }
+
+    var posts = Array.prototype.slice.call(list.querySelectorAll('.blog-post'));
+    var pageSize = parseInt(list.getAttribute('data-page-size'), 10) || 20;
+    var pageCount = Math.ceil(posts.length / pageSize);
+    if (pageCount <= 1) {
+      return;
+    }
+
+    function showPage(pageIndex) {
+      var firstPost = pageIndex * pageSize;
+      posts.forEach(function (post, index) {
+        post.hidden = index < firstPost || index >= firstPost + pageSize;
+      });
+
+      var buttons = pagination.querySelectorAll('button[data-page]');
+      buttons.forEach(function (button) {
+        if (parseInt(button.getAttribute('data-page'), 10) === pageIndex) {
+          button.setAttribute('aria-current', 'page');
+        } else {
+          button.removeAttribute('aria-current');
+        }
+      });
+    }
+
+    for (var pageIndex = 0; pageIndex < pageCount; pageIndex++) {
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.textContent = String(pageIndex + 1);
+      button.setAttribute('data-page', String(pageIndex));
+      button.setAttribute('aria-label', 'Blog ' + (pageIndex + 1) + '. oldal');
+      button.addEventListener('click', function () {
+        showPage(parseInt(this.getAttribute('data-page'), 10));
+      });
+      pagination.appendChild(button);
+    }
+
+    pagination.hidden = false;
+    showPage(0);
   }
 
   function initVideoFacades() {

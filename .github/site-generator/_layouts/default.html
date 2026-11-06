@@ -9,7 +9,6 @@
 <body>
   <div class="layout-wrapper">
     <aside class="sidebar">
-      <button class="sidebar-toggle" aria-label="Menü megnyitása" aria-expanded="false" onclick="toggleSidebar()"></button>
       <div class="sidebar-content">
         <div class="sidebar-brand">
           <a class="site-title" href="{{ '/' | relative_url }}">
@@ -18,11 +17,17 @@
         </div>
         {% include navigation.html %}
       </div>
+      <button class="sidebar-toggle" aria-label="Menü megnyitása" aria-expanded="false" onclick="toggleSidebar()"></button>
     </aside>
     <main class="main-content">
       <div class="container container-1185">
         {% if page.video_id %}
           {% assign video_image = '/CONTENT/assets/images/' | append: page.image | relative_url %}
+          <nav class="breadcrumb" aria-label="Morzsanavigáció">
+            <a href="{{ '/dalok/' | relative_url }}">Dalok</a>
+            <span aria-hidden="true">›</span>
+            <span aria-current="page">{{ page.title }}</span>
+          </nav>
           <div class="song-detail{% if page.lyrics %} has-lyrics{% endif %}">
             <div class="video-player">
               <button class="youtube-facade" type="button" data-video-id="{{ page.video_id }}" data-video-title="{{ page.video_title | default: page.title }}">
