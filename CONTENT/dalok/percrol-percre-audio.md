@@ -2,8 +2,6 @@
 title: Percről percre audio
 layout: default
 video_id: jiT0jlwA7lg
-video_title: "Percről percre audio"
-thumbnail: percrol-percre-audio.jpg
 image: percrol-percre-audio.jpg
 ---
 

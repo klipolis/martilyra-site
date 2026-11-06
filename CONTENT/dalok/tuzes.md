@@ -2,8 +2,6 @@
 title: Tüzes
 layout: default
 video_id: IZ6hYASknlc
-video_title: "Tüzes"
-thumbnail: tuzes.jpg
 image: tuzes.jpg
 lyrics: true
 ---
@@ -11,10 +9,6 @@ lyrics: true
 <a class="github-image-preview" href="../assets/images/tuzes.jpg"><img src="../assets/images/thumbnails/tuzes.jpg" alt="Tüzes borítóképe" width="150" height="150"></a>
 
 # Tüzes
-
-## Dalszöveg
-
-Tüzes
 
 Már késő, lever egy láz, nincs megmentő szelíd fohász
 Már késő, felkavar egy tánc, vad keringő sodor tovább

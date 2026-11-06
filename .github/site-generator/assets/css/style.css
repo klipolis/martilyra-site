@@ -14,6 +14,10 @@ body {
   background: #fff;
 }
 
+html {
+  color-scheme: light;
+}
+
 /* --- Typography --- */
 h1,
 h2,
@@ -239,6 +243,40 @@ a[href^="https://"]::after {
   background: #f5f5f5;
 }
 
+.theme-toggle {
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  flex: 0 0 2.75rem;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #292929;
+  cursor: pointer;
+}
+
+.theme-toggle:hover {
+  background: #f5f5f5;
+  color: #9c3158;
+}
+
+.theme-toggle svg {
+  width: 1.35rem;
+  height: 1.35rem;
+  fill: currentColor;
+}
+
+.theme-icon-sun,
+.theme-toggle.is-dark .theme-icon-moon {
+  display: none;
+}
+
+.theme-toggle.is-dark .theme-icon-sun {
+  display: block;
+}
+
 .home-profile {
   max-width: 46rem;
   margin: 2rem auto 3rem;
@@ -280,13 +318,6 @@ a[href^="https://"]::after {
 }
 .social-link.youtube:hover {
   color: #cc0000;
-}
-
-.social-link.tiktok {
-  color: #69c9ff;
-}
-.social-link.tiktok:hover {
-  color: #5ac8ff;
 }
 
 .social-link.facebook {
@@ -512,6 +543,17 @@ iframe {
   color: #666;
 }
 
+.blog-post-date-link,
+.blog-post-date-link:visited {
+  display: inline-block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.blog-post-date-link:hover {
+  text-decoration: underline;
+}
+
 .blog-post-image {
   display: block;
   width: 100%;
@@ -521,13 +563,16 @@ iframe {
   object-position: left center;
 }
 
-.blog-post-content > :first-child {
-  margin-top: 0;
+.page-thumbnail {
+  margin: 0 0 1rem;
 }
 
-.blog-post-link {
-  display: inline-block;
-  margin-top: 0.75rem;
+.page-thumbnail .blog-post-image {
+  margin: 0 0 1rem;
+}
+
+.blog-post-content > :first-child {
+  margin-top: 0;
 }
 
 .blog-pagination {
@@ -561,20 +606,6 @@ iframe {
 .blog-pagination button:focus-visible {
   outline: 3px solid #0033cc;
   outline-offset: 2px;
-}
-
-.breadcrumb {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem;
-  margin: 0 0 1rem;
-  color: #666;
-  font-size: 0.9em;
-}
-
-.breadcrumb [aria-current="page"] {
-  color: #151515;
 }
 
 /* --- Song detail and video facade --- */
@@ -657,20 +688,11 @@ iframe {
   margin-top: 0;
 }
 
-.page-thumbnail {
-  margin: 0 0 1.25rem;
-}
-
-.page-thumbnail img {
-  width: 100%;
-  max-height: 65vh;
-  object-fit: cover;
-}
-
 .youtube-facade:focus-visible,
 .content-card:focus-visible,
 .social-link:focus-visible,
 .primary-nav a:focus-visible,
+.theme-toggle:focus-visible,
 .site-title:focus-visible {
   outline: 3px solid #0033cc;
   outline-offset: 3px;
@@ -827,6 +849,12 @@ iframe {
     height: 1.3rem;
   }
 
+  .theme-toggle {
+    width: 2.25rem;
+    height: 2.25rem;
+    flex-basis: 2.25rem;
+  }
+
   .social-links {
     gap: 0.1rem 0.25rem;
   }
@@ -869,4 +897,149 @@ iframe {
   .song-detail .video-player {
     position: static;
   }
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+html[data-theme="dark"] body {
+  color: #eeeaf1;
+  background: #17161a;
+}
+
+html[data-theme="dark"] a,
+html[data-theme="dark"] a:visited {
+  color: #c3adff;
+}
+
+html[data-theme="dark"] .site-header {
+  border-color: #3a3740;
+  background: rgba(26, 24, 29, 0.97);
+}
+
+html[data-theme="dark"] .site-title,
+html[data-theme="dark"] .site-title:visited {
+  color: #f4f0f5;
+}
+
+html[data-theme="dark"] .primary-nav a {
+  color: #e8e2eb;
+}
+
+html[data-theme="dark"] .primary-nav a:hover,
+html[data-theme="dark"] .primary-nav a.nav-current {
+  color: #ffafca;
+  background: #3b2932;
+}
+
+html[data-theme="dark"] .social-link {
+  color: #eeeaf1;
+}
+
+html[data-theme="dark"] .social-link:hover,
+html[data-theme="dark"] .theme-toggle:hover {
+  background: #343039;
+}
+
+html[data-theme="dark"] .social-link.youtube {
+  color: #ff6b6b;
+}
+
+html[data-theme="dark"] .social-link.facebook {
+  color: #7eafff;
+}
+
+html[data-theme="dark"] .social-link.tiktok {
+  color: #eeeaf1;
+}
+
+html[data-theme="dark"] .social-link.tiktok:hover {
+  color: #ff6b8a;
+}
+
+html[data-theme="dark"] .theme-toggle {
+  color: #eeeaf1;
+}
+
+html[data-theme="dark"] .theme-toggle:hover {
+  color: #ffafca;
+}
+
+html[data-theme="dark"] .home-profile p,
+html[data-theme="dark"] .songs-intro p,
+html[data-theme="dark"] .video-info p,
+html[data-theme="dark"] .content-card-date,
+html[data-theme="dark"] .blog-post-date,
+html[data-theme="dark"] .lyrics-link .lyrics-artist {
+  color: #c0bac5;
+}
+
+html[data-theme="dark"] pre,
+html[data-theme="dark"] code {
+  color: #eeeaf1;
+  background: #26232a;
+  border-color: #423e48;
+}
+
+html[data-theme="dark"] .letters-nav,
+html[data-theme="dark"] .letter {
+  background-color: #2a252b;
+  border-color: #55414a;
+}
+
+html[data-theme="dark"] .letter-meta {
+  background: #383039;
+}
+
+html[data-theme="dark"] th,
+html[data-theme="dark"] td {
+  border-color: #423e48;
+}
+
+html[data-theme="dark"] th {
+  background: #2d2931;
+}
+
+html[data-theme="dark"] tr:nth-child(even) {
+  background: #211f25;
+}
+
+html[data-theme="dark"] hr,
+html[data-theme="dark"] .content-card,
+html[data-theme="dark"] .blog-post {
+  border-color: #423e48;
+}
+
+html[data-theme="dark"] .content-card,
+html[data-theme="dark"] .blog-pagination button,
+html[data-theme="dark"] .video-listing,
+html[data-theme="dark"] .sidebar-videos .video-link,
+html[data-theme="dark"] .lyrics-link {
+  color: #eeeaf1;
+  border-color: #423e48;
+  background: #211f25;
+}
+
+html[data-theme="dark"] .content-card:hover,
+html[data-theme="dark"] .video-listing:hover,
+html[data-theme="dark"] .sidebar-videos .video-link:hover,
+html[data-theme="dark"] .lyrics-link:hover {
+  background: #302b34;
+}
+
+html[data-theme="dark"] .blog-pagination button[aria-current="page"] {
+  border-color: #9b83e8;
+  background: #6951b5;
+  color: #fff;
+}
+
+html[data-theme="dark"] .blog-pagination button:focus-visible,
+html[data-theme="dark"] .youtube-facade:focus-visible,
+html[data-theme="dark"] .content-card:focus-visible,
+html[data-theme="dark"] .social-link:focus-visible,
+html[data-theme="dark"] .primary-nav a:focus-visible,
+html[data-theme="dark"] .theme-toggle:focus-visible,
+html[data-theme="dark"] .site-title:focus-visible {
+  outline-color: #c3adff;
 }

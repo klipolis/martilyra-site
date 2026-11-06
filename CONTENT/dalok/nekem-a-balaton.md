@@ -2,8 +2,6 @@
 title: Nekem a Balaton
 layout: default
 video_id: 2TUtvvsklAU
-video_title: "Nekem a Balaton"
-thumbnail: nekem-a-balaton.jpg
 image: nekem-a-balaton.jpg
 lyrics: true
 ---
@@ -12,15 +10,10 @@ lyrics: true
 
 # Nekem a Balaton
 
-## Dalszöveg
-
-Nekem a Balaton
-
 Intro
 Nekem a Balaton, igazi jutalom, ahol nem törnek és zúznak a falakon.
 Kérem az italom, igazi nyugalom, egész nap úszom vagy fekszem a teraszon.
 
-1.Verse
 Most elkísér az utamon a szél, és ölelése mindig utolér
 Miért nem lehet mindennap ez, senki semmit nem feltételez
 Jöhet akár a Don Juan, a véletlen mér nem segít
@@ -34,7 +27,6 @@ Bridge
 Nekem a Balaton, igazi jutalom, ahol nem törnek és zúznak a falakon.
 Kérem az italom, igazi nyugalom, egész nap úszom vagy fekszem a teraszon.
 
-Verse 2.
 Most elkísér az utamon a szél és ölelése mindig utolér
 A láthatár ma szabadon vár egy vízcsepp mindig rám talál.
 Elönt az ár, sietni kár, egy-két lány most felsikít    

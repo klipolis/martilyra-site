@@ -2,9 +2,35 @@
   'use strict';
 
   function init() {
+    initThemeToggle();
     markCurrentPage();
     initBlogPagination();
     initVideoFacades();
+  }
+
+  function initThemeToggle() {
+    var toggle = document.querySelector('.theme-toggle');
+    if (!toggle) {
+      return;
+    }
+
+    function updateToggle(theme) {
+      var enableDarkMode = theme !== 'dark';
+      var label = enableDarkMode ? 'Sötét mód bekapcsolása' : 'Világos mód bekapcsolása';
+      toggle.classList.toggle('is-dark', !enableDarkMode);
+      toggle.setAttribute('aria-label', label);
+      toggle.setAttribute('title', label);
+      toggle.querySelector('.visually-hidden').textContent = label;
+    }
+
+    var currentTheme = document.documentElement.dataset.theme;
+    updateToggle(currentTheme);
+    toggle.addEventListener('click', function () {
+      currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.documentElement.dataset.theme = currentTheme;
+      localStorage.setItem('martilyra-theme', currentTheme);
+      updateToggle(currentTheme);
+    });
   }
 
   function initBlogPagination() {

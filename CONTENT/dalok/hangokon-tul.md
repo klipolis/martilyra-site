@@ -2,8 +2,6 @@
 title: Hangokon túl
 layout: default
 video_id: iAaQCdBHNfw
-video_title: "Hangokon túl"
-thumbnail: hangokon-tul.jpg
 image: hangokon-tul.jpg
 lyrics: true
 ---
@@ -12,17 +10,11 @@ lyrics: true
 
 # Hangokon túl
 
-## Dalszöveg
-
-Hangokon túl
-
-Verse 1.
 Hangokon túli világban ébredek
 Nem értem, hogy mit keresek itt veled 
 Egy értelmetlen véletlenbe révedek 
 Nem kérdezek, féltelek
 
-Verse 2.
 Fellegvárban táncoló kis képletek
 Mindenhová beszivárgó mérgetek
 Kis adagban toljátok, ha kérhetem, 

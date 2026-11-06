@@ -4,6 +4,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% if page.title %}{{ page.title }} - {% endif %}{{ site.data.site.title }}</title>
+  <script>
+    (function () {
+      var savedTheme = localStorage.getItem('martilyra-theme');
+      var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.dataset.theme = savedTheme === 'dark' || savedTheme === 'light'
+        ? savedTheme
+        : (prefersDark ? 'dark' : 'light');
+    })();
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
@@ -23,14 +32,9 @@
     <div class="container container-1185">
       {% if page.video_id %}
         {% assign video_image = '/CONTENT/assets/images/' | append: page.image | relative_url %}
-        <nav class="breadcrumb" aria-label="Morzsanavigáció">
-          <a href="{{ '/dalok/' | relative_url }}">Dalok</a>
-          <span aria-hidden="true">›</span>
-          <span aria-current="page">{{ page.title }}</span>
-        </nav>
         <div class="song-detail{% if page.lyrics %} has-lyrics{% endif %}">
           <div class="video-player">
-            <button class="youtube-facade" type="button" data-video-id="{{ page.video_id }}" data-video-title="{{ page.video_title | default: page.title }}">
+            <button class="youtube-facade" type="button" data-video-id="{{ page.video_id }}" data-video-title="{{ page.title }}">
               <img src="{{ video_image }}" alt="{{ page.title }} videó-borító" fetchpriority="high">
               <span class="youtube-play" aria-hidden="true">▶</span>
               <span class="visually-hidden">A {{ page.title }} videó lejátszása</span>
@@ -45,7 +49,7 @@
       {% elsif page.image %}
         {% assign page_image = '/CONTENT/assets/images/' | append: page.image | relative_url %}
         <figure class="page-thumbnail">
-          <img src="{{ page_image }}" alt="{{ page.title }}" fetchpriority="high">
+          <img class="blog-post-image" src="{{ page_image }}" alt="{{ page.title }}" fetchpriority="high">
         </figure>
         {{ content }}
       {% else %}

@@ -2,8 +2,6 @@
 title: Percről percre
 layout: default
 video_id: Z1BTqhj1F5M
-video_title: "Percről percre"
-thumbnail: percrol-percre.jpg
 image: percrol-percre.jpg
 ---
 

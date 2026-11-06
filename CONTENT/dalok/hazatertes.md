@@ -2,8 +2,6 @@
 title: Hazatértés
 layout: default
 video_id: VScWWlzQMPY
-video_title: "Hazatérsz"
-thumbnail: hazateres.jpg
 image: hazateres.jpg
 lyrics: true
 ---
@@ -11,10 +9,6 @@ lyrics: true
 <a class="github-image-preview" href="../assets/images/hazateres.jpg"><img src="../assets/images/thumbnails/hazateres.jpg" alt="Hazatérsz borítóképe" width="150" height="150"></a>
 
 # Hazatérsz
-
-## Dalszöveg
-
-Hazatérsz
 
 Ha elfogy az erőd, elsodor a szél
 Nem vagy egyedül, lelked hazatér

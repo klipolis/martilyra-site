@@ -2,8 +2,6 @@
 title: Melletted
 layout: default
 video_id: mU0Uh_f6BKo
-video_title: "Melletted"
-thumbnail: melletted.jpg
 image: melletted.jpg
 lyrics: true
 ---
@@ -11,10 +9,6 @@ lyrics: true
 <a class="github-image-preview" href="../assets/images/melletted.jpg"><img src="../assets/images/thumbnails/melletted.jpg" alt="Melletted borítóképe" width="150" height="150"></a>
 
 # Melletted
-
-## Dalszöveg
-
-Melletted
 
 Melletted várom, hogy utolérjen az álom
 A táj ma is élénk és szerelmünk félénk

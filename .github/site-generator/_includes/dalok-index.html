@@ -2,7 +2,13 @@
   {% assign songs = site.pages | where_exp: "song", "song.path contains 'dalok/'" | sort: "title" %}
   {% for song in songs %}
     {% if song.video_id %}
-      {% assign thumbnail = '/CONTENT/assets/images/thumbnails/' | append: song.thumbnail | relative_url %}
+      {% assign thumbnail_path = '/CONTENT/assets/images/thumbnails/' | append: song.image %}
+      {% assign thumbnail_file = site.static_files | where: "relative_path", thumbnail_path | first %}
+      {% if thumbnail_file %}
+        {% assign thumbnail = thumbnail_path | relative_url %}
+      {% else %}
+        {% assign thumbnail = '/CONTENT/assets/images/' | append: song.image | relative_url %}
+      {% endif %}
       <a class="content-card" href="{{ song.url | relative_url }}">
         <img src="{{ thumbnail }}" alt="{{ song.title }} videó-borító" loading="lazy">
         <span class="content-card-title">{{ song.title }}</span>

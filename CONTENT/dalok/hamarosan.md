@@ -2,8 +2,6 @@
 title: Hamarosan..
 layout: default
 video_id: 95gs4CoF2Y0
-video_title: "hamarosan.."
-thumbnail: hamarosan.jpg
 image: hamarosan.jpg
 ---
 
