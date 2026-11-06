@@ -3,49 +3,47 @@ title: Nekem a Balaton
 layout: default
 video_id: 2TUtvvsklAU
 image: nekem-a-balaton.jpg
-image_color: "#FBF6EB"
-image_text_color: "#171717"
+image_color: "#0F6577"
+image_text_color: "#FFFFFF"
 lyrics: true
 ---
 
-<a class="github-image-preview" href="../assets/images/nekem-a-balaton.jpg"><img src="../assets/images/thumbnails/nekem-a-balaton.jpg" alt="Nekem a Balaton borítóképe" width="150" height="150"></a>
-
 # Nekem a Balaton
 
-Intro
-Nekem a Balaton, igazi jutalom, ahol nem törnek és zúznak a falakon.
-Kérem az italom, igazi nyugalom, egész nap úszom vagy fekszem a teraszon.
+Intro\\
+Nekem a Balaton, igazi jutalom, ahol nem törnek és zúznak a falakon.\\
+Kérem az italom, igazi nyugalom, egész nap úszom vagy fekszem a teraszon.\\
 
-Most elkísér az utamon a szél, és ölelése mindig utolér
-Miért nem lehet mindennap ez, senki semmit nem feltételez
-Jöhet akár a Don Juan, a véletlen mér nem segít
-Feléd megyek és nem félek, hogy a tűz minket felhevít
+Most elkísér az utamon a szél, és ölelése mindig utolér\\
+Miért nem lehet mindennap ez, senki semmit nem feltételez\\
+Jöhet akár a Don Juan, a véletlen mér nem segít\\
+Feléd megyek és nem félek, hogy a tűz minket felhevít\\
 
-Refr. 
-Csak ülünk ketten a sziklaparton, köröttünk állnak az emberek
-Nincs már semmi cél előttünk, a víz a napfénytől remeg.
+Refr.\\
+Csak ülünk ketten a sziklaparton, köröttünk állnak az emberek\\
+Nincs már semmi cél előttünk, a víz a napfénytől remeg.\\
 
-Bridge 
-Nekem a Balaton, igazi jutalom, ahol nem törnek és zúznak a falakon.
-Kérem az italom, igazi nyugalom, egész nap úszom vagy fekszem a teraszon.
+Bridge\\
+Nekem a Balaton, igazi jutalom, ahol nem törnek és zúznak a falakon.\\
+Kérem az italom, igazi nyugalom, egész nap úszom vagy fekszem a teraszon.\\
 
-Most elkísér az utamon a szél és ölelése mindig utolér
-A láthatár ma szabadon vár egy vízcsepp mindig rám talál.
-Elönt az ár, sietni kár, egy-két lány most felsikít    
-Én ráérek és nem félek, a víz most minket elborít
+Most elkísér az utamon a szél és ölelése mindig utolér\\
+A láthatár ma szabadon vár egy vízcsepp mindig rám talál.\\
+Elönt az ár, sietni kár, egy-két lány most felsikít\\
+Én ráérek és nem félek, a víz most minket elborít\\
 
-Refr. 
-Csak ülünk ketten a sziklaparton köröttünk állnak az emberek
-Nincs már semmi cél előttünk a víz a napfénytől remeg
+Refr.\\
+Csak ülünk ketten a sziklaparton köröttünk állnak az emberek\\
+Nincs már semmi cél előttünk a víz a napfénytől remeg\\
 
-Szólógitár
+Szólógitár\\
 
-Refr.
-Csak ülünk ketten a sziklaparton köröttünk állnak az emberek
-Nincs már semmi cél előttünk a víz a napfénytől remeg
-Feléd úszom a napsütésben elérlek, beléd kapaszkodom,
-Vigyél magaddal be a mélybe, veled ébren is álmodom
-Csak ülünk ketten a sziklaparton köröttünk állnak az emberek
-Nincs már semmi cél előttünk a víz a napfénytől remeg
-Feléd úszom a napsütésben elérlek, beléd kapaszkodom,
+Refr.\\
+Csak ülünk ketten a sziklaparton köröttünk állnak az emberek\\
+Nincs már semmi cél előttünk a víz a napfénytől remeg\\
+Feléd úszom a napsütésben elérlek, beléd kapaszkodom,\\
+Vigyél magaddal be a mélybe, veled ébren is álmodom\\
+Csak ülünk ketten a sziklaparton köröttünk állnak az emberek\\
+Nincs már semmi cél előttünk a víz a napfénytől remeg\\
+Feléd úszom a napsütésben elérlek, beléd kapaszkodom,\\
 Vigyél magaddal be a mélybe, veled ébren is álmodom

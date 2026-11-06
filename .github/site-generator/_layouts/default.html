@@ -60,6 +60,8 @@
           <img class="blog-post-image" src="{{ page_image }}" alt="{{ page.title }}" fetchpriority="high">
         </figure>
         {{ content }}
+      {% elsif page.url == "/" %}
+        {% include home-profile.html %}
       {% else %}
         {{ content }}
       {% endif %}

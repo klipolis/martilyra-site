@@ -4,9 +4,53 @@
   function init() {
     initThemeToggle();
     initHomeSongSlider();
+    initSongCardEffects();
     markCurrentPage();
     initBlogPagination();
     initVideoFacades();
+  }
+
+  function initSongCardEffects() {
+    var cards = document.querySelectorAll('.song-card');
+    if (!cards.length) {
+      return;
+    }
+
+    function activate(card) {
+      var bounds = card.getBoundingClientRect();
+      document.body.style.setProperty('--disco-x', ((bounds.left + bounds.width / 2) / window.innerWidth * 100) + '%');
+      document.body.style.setProperty('--disco-y', ((bounds.top + bounds.height / 2) / window.innerHeight * 100) + '%');
+      document.body.classList.add('is-disco-active');
+    }
+
+    function deactivate() {
+      var activeCard = document.querySelector('.song-card:hover, .song-card:focus-within');
+      if (activeCard) {
+        activate(activeCard);
+        return;
+      }
+
+      document.body.classList.remove('is-disco-active');
+      document.body.style.removeProperty('--disco-x');
+      document.body.style.removeProperty('--disco-y');
+    }
+
+    cards.forEach(function (card) {
+      card.addEventListener('pointerenter', function () {
+        activate(card);
+      });
+      card.addEventListener('pointerleave', function () {
+        deactivate(card);
+      });
+      card.addEventListener('focusin', function () {
+        activate(card);
+      });
+      card.addEventListener('focusout', function (event) {
+        if (!event.relatedTarget || !card.contains(event.relatedTarget)) {
+          deactivate(card);
+        }
+      });
+    });
   }
 
   function initHomeSongSlider() {

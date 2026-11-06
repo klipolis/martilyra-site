@@ -121,8 +121,33 @@ a[href^="https://"]::after {
 }
 
 .main-content {
+  position: relative;
+  z-index: 2;
   padding: 2rem 1.5rem;
   min-width: 0;
+}
+
+body::before {
+  position: fixed;
+  z-index: 1;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at var(--disco-x, 50%) var(--disco-y, 50%), rgba(255, 255, 255, 0.18), transparent 22rem),
+    repeating-conic-gradient(
+      from 0deg at var(--disco-x, 50%) var(--disco-y, 50%),
+      rgba(255, 85, 145, 0.12) 0deg 5deg,
+      transparent 5deg 15deg,
+      rgba(75, 155, 255, 0.1) 15deg 20deg,
+      transparent 20deg 30deg
+    );
+  content: "";
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.45s ease;
+}
+
+body.is-disco-active::before {
+  opacity: 0.8;
 }
 
 .site-title,
@@ -496,27 +521,25 @@ iframe {
 /* --- Song cards --- */
 .song-card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
   justify-items: center;
-  gap: 1.25rem;
+  gap: 1.75rem;
   margin: 1.5rem 0;
-}
-
-.github-image-preview {
-  display: none !important;
 }
 
 .song-card {
   position: relative;
   display: block;
   overflow: hidden;
-  width: min(100%, 22rem);
+  width: min(100%, 15.5rem);
   aspect-ratio: 1;
   border-radius: 50%;
   background: var(--song-color, #343434);
   color: var(--song-text-color, #fff);
   text-decoration: none;
   isolation: isolate;
+  box-shadow: 0 0.75rem 1.8rem rgba(20, 12, 24, 0.24), inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .song-card:visited {
@@ -539,6 +562,19 @@ iframe {
 .song-card:hover .song-card-hover-image,
 .song-card:focus-visible .song-card-hover-image {
   opacity: 0.45;
+  animation: song-disc-spin 36s linear infinite;
+}
+
+.song-card:hover,
+.song-card:focus-visible {
+  transform: translateY(-0.3rem);
+  box-shadow: 0 1.1rem 2.4rem rgba(20, 12, 24, 0.32), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+}
+
+@keyframes song-disc-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .song-card-content {
@@ -549,15 +585,15 @@ iframe {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.85rem;
+  gap: 0.65rem;
   padding: 1.5rem;
   text-align: center;
 }
 
 .song-card-thumbnail {
   display: block;
-  width: 7rem;
-  height: 7rem;
+  width: 5.5rem;
+  height: 5.5rem;
   margin: 0;
   border: 3px solid rgba(255, 255, 255, 0.9);
   border-radius: 50%;
@@ -570,7 +606,7 @@ iframe {
   border-radius: 999px;
   background: var(--song-color, #343434);
   color: var(--song-text-color, #fff);
-  font-size: 1.35rem;
+  font-size: 1.15rem;
   font-weight: bold;
 }
 
@@ -965,8 +1001,8 @@ iframe {
   }
 
   .song-card-thumbnail {
-    width: 6rem;
-    height: 6rem;
+    width: 5rem;
+    height: 5rem;
   }
 
   pre {
@@ -1138,6 +1174,16 @@ html[data-theme="dark"] .site-title:focus-visible {
 @media (prefers-reduced-motion: reduce) {
   .home-song-slide,
   .song-card-hover-image {
+    transition: none;
+  }
+
+  .song-card:hover .song-card-hover-image,
+  .song-card:focus-visible .song-card-hover-image {
+    animation: none;
+  }
+
+  body::before,
+  .song-card {
     transition: none;
   }
 }
