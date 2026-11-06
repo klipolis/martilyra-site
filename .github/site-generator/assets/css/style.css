@@ -7,7 +7,7 @@
 
 body {
   margin: 0;
-  font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;
+  font-family: 'DM Sans', Verdana, Tahoma, Arial, Helvetica, sans-serif;
   font-size: 14px;
   line-height: 1.6;
   color: #151515;
@@ -76,6 +76,7 @@ a[href^="https://"]::after {
 
 .site-header-inner {
   display: flex;
+  flex-wrap: nowrap;
   align-items: center;
   justify-content: space-between;
   gap: 1rem 2rem;
@@ -87,10 +88,18 @@ a[href^="https://"]::after {
 
 .header-links {
   display: flex;
-  flex-wrap: wrap;
+  flex: 1 1 auto;
+  min-width: 0;
+  flex-wrap: nowrap;
   align-items: center;
   justify-content: flex-end;
   gap: 0.75rem 1.5rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.header-links::-webkit-scrollbar {
+  display: none;
 }
 
 .container-1185 {
@@ -146,10 +155,18 @@ a[href^="https://"]::after {
 }
 
 .primary-nav a {
-  display: block;
-  padding: 0.45rem 0.7rem;
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  place-items: center;
   border-radius: 4px;
   text-decoration: none;
+}
+
+.primary-nav a svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: currentColor;
 }
 
 .primary-nav a:hover {
@@ -166,7 +183,7 @@ a[href^="https://"]::after {
 /* --- Social links in header --- */
 .social-links {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
   gap: 0.35rem 0.6rem;
   list-style: none;
@@ -251,15 +268,6 @@ a[href^="https://"]::after {
 }
 .social-link.facebook:hover {
   color: #166fe5;
-}
-
-/* --- Footer --- */
-.site-footer {
-  text-align: center;
-  padding: 1rem;
-  font-size: 0.8em;
-  color: #666;
-  border-top: 1px solid #ddd;
 }
 
 /* --- Pre / Code blocks (preserve family-tree ASCII art and anchors) --- */
@@ -748,20 +756,27 @@ iframe {
 /* --- Responsive --- */
 @media (max-width: 720px) {
   .site-header-inner {
-    flex-direction: column;
-    justify-content: center;
-    gap: 0.25rem;
-    padding: 0.6rem 1rem;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
   }
 
   .header-links {
-    justify-content: center;
-    gap: 0.15rem 0.5rem;
+    gap: 0.35rem;
   }
 
-  .primary-nav ul,
-  .social-links {
-    justify-content: center;
+  .site-title,
+  .site-title:visited {
+    font-size: 1.05rem;
+  }
+
+  .primary-nav a {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  .primary-nav a svg {
+    width: 1.3rem;
+    height: 1.3rem;
   }
 
   .social-links {
@@ -775,9 +790,9 @@ iframe {
   }
 
   .social-link svg {
-    width: 1rem;
-    height: 1rem;
-    flex-basis: 1rem;
+    width: 1.15rem;
+    height: 1.15rem;
+    flex-basis: 1.15rem;
   }
 
   .main-content {
