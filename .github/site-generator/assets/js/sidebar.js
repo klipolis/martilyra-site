@@ -48,15 +48,28 @@
   }
 
   function markCurrentPage() {
-    var path = window.location.pathname;
+    var currentPath = normalizePath(window.location.pathname);
+    var homeLink = document.querySelector('.site-title');
+    var siteRoot = homeLink ? normalizePath(new URL(homeLink.href, window.location.href).pathname) : '/';
     var links = document.querySelectorAll('.sidebar-nav a');
     links.forEach(function(link) {
-      if (link.getAttribute('href') === path || (path === '/' && link.getAttribute('href') === '/')) {
-        link.classList.add('nav-current');
+      var linkPath = normalizePath(new URL(link.href, window.location.href).pathname);
+      var isHome = linkPath === siteRoot;
+      var isCurrentPage = linkPath === currentPath;
+      var isCurrentSection = !isHome && currentPath.indexOf(linkPath + '/') === 0;
+      var isActive = isCurrentPage || isCurrentSection;
+
+      link.classList.toggle('nav-current', isActive);
+      if (isActive) {
+        link.setAttribute('aria-current', isCurrentPage ? 'page' : 'location');
       } else {
-        link.classList.remove('nav-current');
+        link.removeAttribute('aria-current');
       }
     });
+  }
+
+  function normalizePath(path) {
+    return path.length > 1 ? path.replace(/\/+$/, '') : path;
   }
 
   init();

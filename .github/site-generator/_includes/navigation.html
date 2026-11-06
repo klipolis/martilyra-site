@@ -1,39 +1,22 @@
+{% assign folders = "dalok,blog" | split: "," %}
 {% assign pages = site.pages | sort: "path" %}
-{% assign seen_folders = "|" %}
-<nav class="sidebar-nav">
+<nav class="sidebar-nav" aria-label="Fő navigáció">
   <ul>
-    {% for page in pages %}
-      {% assign path_parts = page.path | split: "/" %}
-      {% assign page_extension = page.path | split: "." | last %}
-      {% assign page_name = path_parts | last | remove: ".md" %}
-      {% if page_extension == "md" and path_parts.size == 1 and page_name != "index" %}
-        {% assign page_label = page.title | default: page_name | replace: "-", " " %}
-        <li><a href="{{ page.url | relative_url }}">{{ page_label }}</a></li>
-      {% endif %}
-    {% endfor %}
-    {% for page in pages %}
-      {% assign path_parts = page.path | split: "/" %}
-      {% assign folder = path_parts | first %}
-      {% assign folder_marker = "|" | append: folder | append: "|" %}
-      {% assign page_extension = page.path | split: "." | last %}
-      {% if page_extension == "md" and path_parts.size > 1 and folder != "assets" %}
-        {% unless seen_folders contains folder_marker %}
-          {% assign seen_folders = seen_folders | append: folder_marker %}
-          {% assign folder_index_path = folder | append: "/index.md" %}
-          {% assign folder_index = pages | where: "path", folder_index_path | first %}
-          {% assign folder_label = folder | replace: "-", " " | capitalize %}
-          {% if folder_index %}
-            {% assign folder_label = folder_index.title | default: folder_label %}
-          {% endif %}
-          <li>
-            {% if folder_index %}
-              <a href="{{ folder_index.url | relative_url }}">{{ folder_label }}</a>
-            {% else %}
-              <span>{{ folder_label }}</span>
-            {% endif %}
-          </li>
-        {% endunless %}
+    {% for folder in folders %}
+      {% assign folder_index_path = folder | append: "/index.md" %}
+      {% assign folder_index = pages | where: "path", folder_index_path | first %}
+      {% if folder_index %}
+        {% assign folder_label = folder_index.title | default: folder | capitalize %}
+        <li><a href="{{ folder_index.url | relative_url }}">{{ folder_label }}</a></li>
       {% endif %}
     {% endfor %}
   </ul>
 </nav>
+<section class="sidebar-social" aria-label="Közösségi oldalaim">
+  <h2>Kövess</h2>
+  <ul class="social-links">
+    <li><a class="social-link youtube" href="https://www.youtube.com/@martilyra5556" target="_blank" rel="noopener noreferrer">YouTube</a></li>
+    <li><a class="social-link tiktok" href="https://www.tiktok.com/@mlorinczfazekas" target="_blank" rel="noopener noreferrer">TikTok</a></li>
+    <li><a class="social-link facebook" href="https://www.facebook.com/martilyra" target="_blank" rel="noopener noreferrer">Facebook</a></li>
+  </ul>
+</section>

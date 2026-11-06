@@ -242,10 +242,20 @@ a[href^="https://"]::after {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  list-style: none;
   margin-top: 1rem;
   padding: 0.5rem;
   border-top: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
+}
+
+.sidebar-social h2 {
+  margin: 1rem 0 0;
+  font-size: 0.9em;
+}
+
+.social-links li {
+  margin: 0;
 }
 
 .social-link {
