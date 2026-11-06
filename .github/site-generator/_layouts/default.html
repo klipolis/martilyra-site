@@ -29,9 +29,9 @@
         <img src="{{ '/CONTENT/assets/images/facebook-profile-portrait.jpg' | relative_url }}" alt="" width="40" height="40">
         <span>{{ site.data.site.title }}</span>
       </a>
-      {% include header.html %}
     </div>
   </header>
+  {% include sidebar.html %}
   <main class="main-content{% if page.url == '/' %} song-archive-page{% endif %}">
     <div class="container container-1185">
       {% if page.redirect_to_dalok %}
@@ -80,12 +80,28 @@
         </div>
       {% elsif page.youtube_url %}
         {% assign video_image = '/CONTENT/assets/images/' | append: page.image | relative_url %}
+        {% assign video_thumbnail_path = '/CONTENT/assets/images/thumbnails/' | append: page.image %}
+        {% assign video_thumbnail_file = site.static_files | where: "relative_path", video_thumbnail_path | first %}
+        {% if video_thumbnail_file %}
+          {% assign video_thumbnail = video_thumbnail_path | relative_url %}
+        {% else %}
+          {% assign video_thumbnail = video_image %}
+        {% endif %}
+        {% assign song_title_id = page.path | remove: 'dalok/' | remove: '.md' | slugify %}
         <div class="song-detail{% if page.lyrics %} has-lyrics{% endif %}">
-          <div class="video-player">
-            <button class="youtube-facade" type="button" data-video-url="{{ page.youtube_url }}" data-video-title="{{ page.title }}">
-              <img src="{{ video_image }}" alt="{{ page.title }} videó-borító" fetchpriority="high">
+          <div class="video-player" style="--song-color: {{ page.image_color | default: '#343434' }}; --song-text-color: {{ page.image_text_color | default: '#ffffff' }}">
+            <button class="youtube-facade song-card" type="button" data-video-url="{{ page.youtube_url }}" data-video-title="{{ page.title }}" aria-label="{{ page.title }} videójának lejátszása">
+              <img class="song-card-hover-image" src="{{ video_image }}" alt="" fetchpriority="high">
+              <span class="song-card-content">
+                <img class="song-card-thumbnail" src="{{ video_thumbnail }}" alt="" fetchpriority="high">
+                <svg class="song-card-title" viewBox="0 0 240 240" aria-hidden="true" focusable="false">
+                  <defs>
+                    <path id="song-title-path-{{ song_title_id }}" d="M 22,120 A 98,98 0 0,0 218,120"></path>
+                  </defs>
+                  <text><textPath href="#song-title-path-{{ song_title_id }}" startOffset="50%" text-anchor="middle">{{ page.title }}</textPath></text>
+                </svg>
+              </span>
               <span class="youtube-play" aria-hidden="true">▶</span>
-              <span class="visually-hidden">A {{ page.title }} videó lejátszása</span>
             </button>
           </div>
           {% if page.lyrics %}

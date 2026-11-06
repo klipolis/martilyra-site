@@ -52,8 +52,8 @@
       var bounds = tower.getBoundingClientRect();
       var pointerX = (event.clientX - bounds.left) / bounds.width * 2 - 1;
       var pointerY = (event.clientY - bounds.top) / bounds.height * 2 - 1;
-      tower.style.setProperty('--tower-tilt-x', (-pointerY * 18) + 'deg');
-      tower.style.setProperty('--tower-tilt-y', (-pointerX * 24) + 'deg');
+      tower.style.setProperty('--tower-tilt-x', (-pointerY * 25) + 'deg');
+      tower.style.setProperty('--tower-tilt-y', (-pointerX * 34) + 'deg');
     });
 
     tower.addEventListener('pointerleave', function () {
@@ -165,8 +165,8 @@
         var bounds = card.getBoundingClientRect();
         var pointerX = (event.clientX - bounds.left) / bounds.width * 2 - 1;
         var pointerY = (event.clientY - bounds.top) / bounds.height * 2 - 1;
-        card.style.setProperty('--card-tilt-x', (-pointerY * 16) + 'deg');
-        card.style.setProperty('--card-tilt-y', (pointerX * 16) + 'deg');
+        card.style.setProperty('--card-tilt-x', (-pointerY * 24) + 'deg');
+        card.style.setProperty('--card-tilt-y', (pointerX * 24) + 'deg');
       });
       card.addEventListener('pointerleave', function () {
         card.style.setProperty('--card-tilt-x', '0deg');
@@ -204,7 +204,6 @@
       var label = enableDarkMode ? 'Sötét mód bekapcsolása' : 'Világos mód bekapcsolása';
       toggle.classList.toggle('is-dark', !enableDarkMode);
       toggle.setAttribute('aria-label', label);
-      toggle.setAttribute('title', label);
       toggle.querySelector('.visually-hidden').textContent = label;
     }
 
@@ -282,7 +281,29 @@
         iframe.allowFullscreen = true;
         iframe.loading = 'eager';
         iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+        var player = facade.closest('.video-player');
+        var songDetail = player.closest('.song-detail');
+        var reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var initialHeight = player.getBoundingClientRect().height;
         facade.replaceWith(iframe);
+        songDetail.classList.add('is-playing');
+        if (reducedMotion) {
+          player.classList.add('is-playing');
+          return;
+        }
+
+        player.style.height = initialHeight + 'px';
+        window.requestAnimationFrame(function () {
+          player.classList.add('is-playing');
+          player.style.height = (songDetail.getBoundingClientRect().width * 9 / 16) + 'px';
+        });
+        player.addEventListener('transitionend', function onPlayerTransitionEnd(event) {
+          if (event.propertyName !== 'height') {
+            return;
+          }
+          player.style.removeProperty('height');
+          player.removeEventListener('transitionend', onPlayerTransitionEnd);
+        });
       });
     });
   }

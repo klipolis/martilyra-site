@@ -13,7 +13,7 @@
             {% assign folder_url = site.data.site.dalok_url %}
           {% endif %}
           <li>
-            <a href="{{ folder_url | relative_url }}" aria-label="{{ folder_label }}" title="{{ folder_label }}">
+            <a href="{{ folder_url | relative_url }}" aria-label="{{ folder_label }}">
               {% if folder == "dalok" %}
                 <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v12.3a3.5 3.5 0 1 1-2-3.16V7l10-2v10.3a3.5 3.5 0 1 1-2-3.16V2l-6 1Z"/></svg>
               {% else %}
@@ -60,7 +60,7 @@
       </li>
     </ul>
   </section>
-  <button class="theme-toggle" type="button" aria-label="Sötét mód bekapcsolása" title="Sötét mód bekapcsolása">
+  <button class="theme-toggle" type="button" aria-label="Sötét mód bekapcsolása">
     <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm0-6a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1Zm0 16a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1ZM4.22 4.22a1 1 0 0 1 1.42 0l1.41 1.41a1 1 0 0 1-1.42 1.42L4.22 5.64a1 1 0 0 1 0-1.42Zm11.31 11.31a1 1 0 0 1 1.42 0l1.41 1.41a1 1 0 0 1-1.42 1.42l-1.41-1.41a1 1 0 0 1 0-1.42ZM2 12a1 1 0 0 1 1-1h2a1 1 0 1 1 0 2H3a1 1 0 0 1-1-1Zm16 0a1 1 0 0 1 1-1h2a1 1 0 1 1 0 2h-2a1 1 0 0 1-1-1ZM4.22 19.78a1 1 0 0 1 0-1.42l1.41-1.41a1 1 0 0 1 1.42 1.42l-1.41 1.41a1 1 0 0 1-1.42 0Zm11.31-11.31a1 1 0 0 1 0-1.42l1.41-1.41a1 1 0 0 1 1.42 1.42l-1.41 1.41a1 1 0 0 1-1.42 0Z"/></svg>
     <span class="visually-hidden">Sötét mód bekapcsolása</span>
   </button>
