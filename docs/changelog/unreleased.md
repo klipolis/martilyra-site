@@ -2,10 +2,11 @@
 
 ## Megjelenés
 
-- A nyitóoldal egy zenei borítóképekből álló, diszkógömb-hatású kollázst és hangsúlyos címet mutat; a Dalok-archívum önálló, lemezhatású rácsban érhető el.
+- A nyitóoldal zenei borítókból épülő, lassan forgó, tükrös diszkógömböt és átlátszó hátterű, letisztult címet mutat; a Dalok-archívum önálló, lemezhatású rácsban érhető el.
 - A bal oldali sávon kapott helyet az oldalkép, a címmel megjelenő buborékos súgóval.
 - A fénysugarak nem forognak, színintenzitásuk lassan változik, és sötét módban is láthatók.
-- A blogbejegyzések szövege a kép és a belső dalhivatkozás mellé került; a daloldalak letisztult videóvezérlőket, nagyított lejátszási nézetet és platformonkénti lejátszási hivatkozásokat kaptak.
+- A blogbejegyzések szövege a kép mellé került, a dátum után pedig forgó minilemez mutatja a kapcsolódó dalt; a daloldalak lejátszási idővonalat, a lejátszást megszakítás nélkül megtartó nagyított nézetet és színes platformikonokat kaptak.
+- A fényhatások pulzálása változó ütemű, a diszkógömb tükrös csempéin pedig külön-külön mozgó fényvisszaverődés jelenik meg.
 
 ## Dokumentáció és fejlesztői munkafolyamat
 

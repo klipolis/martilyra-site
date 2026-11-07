@@ -234,6 +234,9 @@
         var controls = player.querySelector('.video-controls');
         var playbackControl = player.querySelector('.video-playback');
         var captionsControl = player.querySelector('.video-captions');
+        var progressControl = player.querySelector('.video-progress');
+        var currentTimeLabel = player.querySelector('.video-current-time');
+        var durationLabel = player.querySelector('.video-duration');
         var expandControl = slot.querySelector('.video-expand');
         var errorMessage = player.querySelector('.video-error');
         var reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -269,24 +272,51 @@
             return;
           }
 
+          var progressTimer = null;
           var youtubePlayer = new window.YT.Player(iframe, {
             events: {
               onReady: function () {
                 captionsControl.disabled = false;
                 playbackControl.setAttribute('aria-label', 'Videó lejátszása');
                 playbackControl.disabled = false;
+                updateTimeline();
               },
               onStateChange: function (event) {
                 var isPlaying = event.data === window.YT.PlayerState.PLAYING;
                 playbackControl.setAttribute('aria-label', isPlaying ? 'Videó szüneteltetése' : 'Videó lejátszása');
+                updateTimeline();
+                if (isPlaying) {
+                  if (!progressTimer) {
+                    progressTimer = window.setInterval(updateTimeline, 500);
+                  }
+                } else if (progressTimer) {
+                  window.clearInterval(progressTimer);
+                  progressTimer = null;
+                }
               },
               onError: function (event) {
                 console.error('YouTube player reported an error:', event.data);
                 errorMessage.textContent = 'A YouTube-videó nem tölthető be ezen az oldalon.';
                 errorMessage.hidden = false;
+                if (progressTimer) {
+                  window.clearInterval(progressTimer);
+                  progressTimer = null;
+                }
               }
             }
           });
+
+          function updateTimeline() {
+            var duration = youtubePlayer.getDuration();
+            var currentTime = youtubePlayer.getCurrentTime();
+            if (!Number.isFinite(duration) || duration <= 0 || !Number.isFinite(currentTime)) {
+              return;
+            }
+            progressControl.disabled = false;
+            progressControl.value = String(Math.round((currentTime / duration) * 1000));
+            currentTimeLabel.textContent = formatVideoTime(currentTime);
+            durationLabel.textContent = formatVideoTime(duration);
+          }
 
           playbackControl.addEventListener('click', function () {
             if (playbackControl.getAttribute('aria-label') === 'Videó lejátszása') {
@@ -306,9 +336,33 @@
               console.error('Could not change YouTube caption settings:', error);
             }
           });
+
+          progressControl.addEventListener('input', function () {
+            var duration = youtubePlayer.getDuration();
+            if (Number.isFinite(duration) && duration > 0) {
+              currentTimeLabel.textContent = formatVideoTime((Number(progressControl.value) / 1000) * duration);
+            }
+          });
+
+          progressControl.addEventListener('change', function () {
+            var duration = youtubePlayer.getDuration();
+            if (Number.isFinite(duration) && duration > 0) {
+              youtubePlayer.seekTo((Number(progressControl.value) / 1000) * duration, true);
+            }
+          });
         });
       });
     });
+  }
+
+  function formatVideoTime(seconds) {
+    var totalSeconds = Math.floor(seconds);
+    var minutes = Math.floor(totalSeconds / 60);
+    var remainingSeconds = String(totalSeconds % 60).padStart(2, '0');
+    if (minutes >= 60) {
+      return Math.floor(minutes / 60) + ':' + String(minutes % 60).padStart(2, '0') + ':' + remainingSeconds;
+    }
+    return minutes + ':' + remainingSeconds;
   }
 
   function loadYouTubeIframeApi(callback) {
@@ -356,8 +410,6 @@
 
     var previousFocus;
     var previousBodyOverflow;
-    var originalParent = slot.parentNode;
-    var originalNextSibling = slot.nextSibling;
 
     function setExpanded(expanded) {
       document.body.classList.toggle('is-video-expanded', expanded);
@@ -367,14 +419,13 @@
       toggle.setAttribute('aria-pressed', String(expanded));
       toggle.setAttribute('aria-label', expanded ? 'Videó bezárása' : 'Videó kinagyítása');
       player.classList.remove('is-mini');
+      slot.style.removeProperty('height');
       if (expanded) {
         previousFocus = document.activeElement;
         previousBodyOverflow = document.body.style.overflow;
         document.body.style.overflow = 'hidden';
-        document.body.appendChild(slot);
         slot.querySelector('.video-expand').focus();
       } else {
-        originalParent.insertBefore(slot, originalNextSibling && originalNextSibling.parentNode === originalParent ? originalNextSibling : null);
         document.body.style.overflow = previousBodyOverflow || '';
         if (previousFocus && typeof previousFocus.focus === 'function') {
           previousFocus.focus();

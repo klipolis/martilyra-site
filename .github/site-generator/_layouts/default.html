@@ -16,11 +16,13 @@
   {% if page.url == '/' %}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bowlby+One+SC&amp;display=swap&amp;text=Marti%20Lyra" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700&amp;display=swap&amp;text=Marti%20Lyra" rel="stylesheet">
   {% endif %}
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
 </head>
 <body{% if page.youtube_url %} class="song-detail-page"{% endif %}>
+  <div class="disco-ray-layer disco-ray-layer-warm" aria-hidden="true"></div>
+  <div class="disco-ray-layer disco-ray-layer-cool" aria-hidden="true"></div>
   {% include sidebar.html %}
   <main class="main-content{% if page.url == '/' %} home-main{% endif %}">
     <div class="container container-1185">
@@ -30,6 +32,7 @@
           <article class="blog-single">
             <h1 class="blog-single-title">{{ page.title }}</h1>
             <time class="blog-post-date" datetime="{{ page.date | date: '%Y-%m-%d' }}">{{ page.date | date: "%Y. %m. %d." }}</time>
+            {% include related-song.html post=page index=0 %}
             {% assign post_thumbnail = page.image %}
             <div class="blog-post-media">
               {% if post_thumbnail %}
@@ -42,7 +45,6 @@
                 {% endif %}
                 <img class="blog-post-image" src="{{ page_image }}" alt="{{ page.title }}" fetchpriority="high">
               {% endif %}
-              {% include related-song.html post=page %}
             </div>
             {% assign page_title = page.title | downcase %}
             {% assign page_heading = page.content | strip | downcase %}
@@ -95,14 +97,21 @@
                   </span>
                 </button>
                 <div class="video-controls" role="group" aria-label="Videóvezérlők" hidden>
-                  <button class="video-control video-captions" type="button" aria-label="Magyar felirat bekapcsolása" aria-pressed="false" disabled>CC</button>
-                  <a class="video-control video-channel" href="https://www.youtube.com/@martilyra5556" aria-label="Marti Lyra YouTube-csatornája" target="_blank" rel="noopener noreferrer">
-                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0 2c-4.4 0-8 2.2-8 5v1h16v-1c0-2.8-3.6-5-8-5Z"/></svg>
-                  </a>
-                  <button class="video-control video-playback" type="button" aria-label="Videó szüneteltetése" disabled>
-                    <svg class="icon-pause" aria-hidden="true" viewBox="0 0 24 24"><path d="M7 5h4v14H7zm6 0h4v14h-4z"/></svg>
-                    <svg class="icon-play" aria-hidden="true" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                  </button>
+                  <div class="video-control-row">
+                    <button class="video-control video-captions" type="button" aria-label="Magyar felirat bekapcsolása" aria-pressed="false" disabled>CC</button>
+                    <a class="video-control video-channel" href="https://www.youtube.com/@martilyra5556" aria-label="Marti Lyra YouTube-csatornája" target="_blank" rel="noopener noreferrer">
+                      <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0 2c-4.4 0-8 2.2-8 5v1h16v-1c0-2.8-3.6-5-8-5Z"/></svg>
+                    </a>
+                    <button class="video-control video-playback" type="button" aria-label="Videó szüneteltetése" disabled>
+                      <svg class="icon-pause" aria-hidden="true" viewBox="0 0 24 24"><path d="M7 5h4v14H7zm6 0h4v14h-4z"/></svg>
+                      <svg class="icon-play" aria-hidden="true" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    </button>
+                  </div>
+                  <div class="video-timeline">
+                    <time class="video-current-time">0:00</time>
+                    <input class="video-progress" type="range" min="0" max="1000" value="0" aria-label="Videó pozíciója" disabled>
+                    <time class="video-duration">0:00</time>
+                  </div>
                 </div>
                 <p class="video-error" role="status" hidden></p>
               </div>
@@ -112,9 +121,9 @@
               </button>
             </div>
             <nav class="song-platform-links" aria-label="Dal lejátszása más platformon">
-              <a href="{{ page.youtube_url }}" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><span>YouTube</span></a>
-              <a href="https://music.apple.com/search?term={{ song_stream_query }}" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><span>Apple Music</span></a>
-              <a href="https://open.spotify.com/search/{{ song_stream_query }}" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><span>Spotify</span></a>
+              <a class="platform-youtube" href="{{ page.youtube_url }}" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8Z"/><path fill="#fff" d="M9.6 15.6V8.4l6.3 3.6-6.3 3.6Z"/></svg><span>YouTube</span></a>
+              <a class="platform-apple-music" href="https://music.apple.com/search?term={{ song_stream_query }}" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 2.5 5.8 5v10.1a3.3 3.3 0 1 0 2 3V9.2l8.4-2.1v6.8a3.3 3.3 0 1 0 2 3V3.8L12 5.5V2.5Z"/></svg><span>Apple Music</span></a>
+              <a class="platform-spotify" href="https://open.spotify.com/search/{{ song_stream_query }}" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M5.5 9c4.5-1.3 9.5-.8 13 1.5M6.5 12c3.7-1 7.7-.5 10.8 1.3M7.5 15c2.8-.7 5.7-.3 8.2 1"/></svg><span>Spotify</span></a>
             </nav>
           </div>
           {% if page.lyrics %}

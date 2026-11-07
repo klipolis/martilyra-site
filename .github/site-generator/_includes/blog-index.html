@@ -15,13 +15,13 @@
             {% endif %}
             <img class="blog-post-image" src="{{ image }}" alt="{{ post.title }}" loading="lazy">
           {% endif %}
-          {% include related-song.html post=post %}
         </div>
         <div class="blog-post-body">
           <h2 class="blog-post-title"><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
           <a class="blog-post-date-link" href="{{ post.url | relative_url }}">
             <time class="blog-post-date" datetime="{{ post.date | date: '%Y-%m-%d' }}">{{ post.date | date: "%Y. %m. %d." }}</time>
           </a>
+          {% include related-song.html post=post index=forloop.index0 %}
           {% assign post_title = post.title | downcase %}
           {% assign post_heading = post.content | strip | downcase %}
           {% assign has_title_heading = false %}
