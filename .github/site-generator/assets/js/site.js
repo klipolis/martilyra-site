@@ -410,8 +410,10 @@
 
     var previousFocus;
     var previousBodyOverflow;
+    var expansionAnimation;
+    var reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    function setExpanded(expanded) {
+    function setExpandedState(expanded) {
       document.body.classList.toggle('is-video-expanded', expanded);
       slot.classList.toggle('is-expanded', expanded);
       slot.setAttribute('aria-modal', String(expanded));
@@ -419,19 +421,91 @@
       toggle.setAttribute('aria-pressed', String(expanded));
       toggle.setAttribute('aria-label', expanded ? 'Videó bezárása' : 'Videó kinagyítása');
       player.classList.remove('is-mini');
-      slot.style.removeProperty('height');
+    }
+
+    function setFixedGeometry(bounds) {
+      slot.style.position = 'fixed';
+      slot.style.top = bounds.top + 'px';
+      slot.style.left = bounds.left + 'px';
+      slot.style.width = bounds.width + 'px';
+      slot.style.height = bounds.height + 'px';
+      slot.style.maxHeight = 'none';
+      slot.style.aspectRatio = 'auto';
+      slot.style.transform = 'none';
+    }
+
+    function clearFixedGeometry() {
+      ['position', 'top', 'left', 'width', 'height', 'max-height', 'aspect-ratio', 'transform'].forEach(function (property) {
+        slot.style.removeProperty(property);
+      });
+    }
+
+    function clearAnimationStyles() {
+      clearFixedGeometry();
+      slot.style.removeProperty('transition');
+    }
+
+    function animateBounds(from, to, onFinish) {
+      if (reducedMotion || typeof slot.animate !== 'function') {
+        onFinish();
+        return;
+      }
+
+      expansionAnimation = slot.animate([
+        { top: from.top + 'px', left: from.left + 'px', width: from.width + 'px', height: from.height + 'px' },
+        { top: to.top + 'px', left: to.left + 'px', width: to.width + 'px', height: to.height + 'px' }
+      ], {
+        duration: 520,
+        easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)'
+      });
+      expansionAnimation.onfinish = function () {
+        expansionAnimation.cancel();
+        expansionAnimation = null;
+        onFinish();
+      };
+    }
+
+    function setExpanded(expanded) {
       if (expanded) {
         previousFocus = document.activeElement;
         previousBodyOverflow = document.body.style.overflow;
         document.body.style.overflow = 'hidden';
+        var from = slot.getBoundingClientRect();
+        slot.style.transition = 'none';
+        slot.getBoundingClientRect();
+        setExpandedState(true);
+        var to = slot.getBoundingClientRect();
+        setFixedGeometry(from);
+        slot.getBoundingClientRect();
+        animateBounds(from, to, function () {
+          clearAnimationStyles();
+        });
         slot.querySelector('.video-expand').focus();
-      } else {
+        return;
+      }
+
+      var from = slot.getBoundingClientRect();
+      if (expansionAnimation) {
+        expansionAnimation.cancel();
+        expansionAnimation = null;
+      }
+      slot.style.transition = 'none';
+      setFixedGeometry(from);
+      setExpandedState(false);
+      clearFixedGeometry();
+      var to = slot.getBoundingClientRect();
+      setExpandedState(true);
+      setFixedGeometry(from);
+      slot.getBoundingClientRect();
+      animateBounds(from, to, function () {
+        setExpandedState(false);
+        clearAnimationStyles();
         document.body.style.overflow = previousBodyOverflow || '';
         if (previousFocus && typeof previousFocus.focus === 'function') {
           previousFocus.focus();
         }
         window.dispatchEvent(new Event('scroll'));
-      }
+      });
     }
 
     toggle.addEventListener('click', function () {
