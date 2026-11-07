@@ -5,6 +5,7 @@
 - A nyitóoldal egy zenei borítóképekből álló, diszkógömb-hatású kollázst és hangsúlyos címet mutat; a Dalok-archívum önálló, lemezhatású rácsban érhető el.
 - A bal oldali sávon kapott helyet az oldalkép, a címmel megjelenő buborékos súgóval.
 - A fénysugarak nem forognak, színintenzitásuk lassan változik, és sötét módban is láthatók.
+- A blogbejegyzések szövege a kép és a belső dalhivatkozás mellé került; a daloldalak letisztult videóvezérlőket, nagyított lejátszási nézetet és platformonkénti lejátszási hivatkozásokat kaptak.
 
 ## Dokumentáció és fejlesztői munkafolyamat
 

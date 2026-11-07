@@ -3,10 +3,6 @@
   {% for post in blog_posts %}
     {% if post.date %}
       <article class="blog-post">
-        <h2 class="blog-post-title"><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
-        <a class="blog-post-date-link" href="{{ post.url | relative_url }}">
-          <time class="blog-post-date" datetime="{{ post.date | date: '%Y-%m-%d' }}">{{ post.date | date: "%Y. %m. %d." }}</time>
-        </a>
         {% assign post_thumbnail = post.image %}
         <div class="blog-post-media">
           {% if post_thumbnail %}
@@ -21,19 +17,25 @@
           {% endif %}
           {% include related-song.html post=post %}
         </div>
-        {% assign post_title = post.title | downcase %}
-        {% assign post_heading = post.content | strip | downcase %}
-        {% assign has_title_heading = false %}
-        {% assign heading_prefixes = "#,##,###" | split: "," %}
-        {% for heading_prefix in heading_prefixes %}
-          {% assign expected_heading = heading_prefix | append: " " | append: post_title %}
-          {% assign heading_length = expected_heading.size %}
-          {% assign content_heading = post_heading | slice: 0, heading_length %}
-          {% if content_heading == expected_heading %}
-            {% assign has_title_heading = true %}
-          {% endif %}
-        {% endfor %}
-        <div class="blog-post-content{% if has_title_heading %} has-title-heading{% endif %}">{{ post.content | markdownify }}</div>
+        <div class="blog-post-body">
+          <h2 class="blog-post-title"><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
+          <a class="blog-post-date-link" href="{{ post.url | relative_url }}">
+            <time class="blog-post-date" datetime="{{ post.date | date: '%Y-%m-%d' }}">{{ post.date | date: "%Y. %m. %d." }}</time>
+          </a>
+          {% assign post_title = post.title | downcase %}
+          {% assign post_heading = post.content | strip | downcase %}
+          {% assign has_title_heading = false %}
+          {% assign heading_prefixes = "#,##,###" | split: "," %}
+          {% for heading_prefix in heading_prefixes %}
+            {% assign expected_heading = heading_prefix | append: " " | append: post_title %}
+            {% assign heading_length = expected_heading.size %}
+            {% assign content_heading = post_heading | slice: 0, heading_length %}
+            {% if content_heading == expected_heading %}
+              {% assign has_title_heading = true %}
+            {% endif %}
+          {% endfor %}
+          <div class="blog-post-content{% if has_title_heading %} has-title-heading{% endif %}">{{ post.content | markdownify }}</div>
+        </div>
       </article>
     {% endif %}
   {% endfor %}

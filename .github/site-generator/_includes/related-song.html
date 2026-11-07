@@ -1,7 +1,5 @@
 {% assign song_pages = site.pages | where_exp: "song", "song.path contains 'dalok/'" %}
 {% assign post_song_slugs = include.post.songs | default: "" | split: "," %}
-{% assign post_text = include.post.content | downcase %}
-{% assign post_title = include.post.title | downcase %}
 {% for song_slug in post_song_slugs %}
   {% assign normalized_song_slug = song_slug | strip | remove: '.md' | split: '/' | last %}
   {% assign linked_song = nil %}
@@ -22,15 +20,6 @@
     {% endif %}
     {% assign song_title_id = linked_song.path | remove: 'dalok/' | remove: '.md' %}
     {% assign related_title_id = include.post.path | slugify | append: '-' | append: song_title_id | slugify %}
-    {% assign has_youtube_link = false %}
-    {% if linked_song.youtube_url and include.post.content contains linked_song.youtube_url %}
-      {% assign has_youtube_link = true %}
-    {% endif %}
-    {% assign has_spotify_mention = false %}
-    {% if post_text contains 'spotify' or post_title contains 'spotify' %}
-      {% assign has_spotify_mention = true %}
-    {% endif %}
-    {% assign spotify_query = linked_song.title | append: ' Marti Lyra' | uri_escape %}
     <aside class="related-song">
       <a class="song-card related-song-card" href="{{ linked_song.url | relative_url }}" aria-label="{{ linked_song.title }}" style="--song-color: {{ linked_song.image_color | default: '#343434' }}; --song-text-color: {{ linked_song.image_text_color | default: '#ffffff' }}">
         <img class="song-card-hover-image" src="{{ '/CONTENT/assets/images/' | append: linked_song.image | relative_url }}" alt="" loading="lazy">
@@ -44,20 +33,6 @@
           </svg>
         </span>
       </a>
-      {% if has_youtube_link or has_spotify_mention %}
-        <div class="related-song-platforms" role="group" aria-label="Dal elérhetőségei">
-          {% if has_youtube_link %}
-            <a class="related-song-platform youtube" href="{{ linked_song.youtube_url }}" aria-label="YouTube-videó: {{ linked_song.title }}" target="_blank" rel="noopener noreferrer">
-              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.3 3.6-6.3 3.6Z"/></svg>
-            </a>
-          {% endif %}
-          {% if has_spotify_mention %}
-            <a class="related-song-platform spotify" href="https://open.spotify.com/search/{{ spotify_query }}" aria-label="Keresés a Spotifyon: {{ linked_song.title }}" target="_blank" rel="noopener noreferrer">
-              <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M5.5 9c4.5-1.3 9.5-.8 13 1.5M6.5 12c3.7-1 7.7-.5 10.8 1.3M7.5 15c2.8-.7 5.7-.3 8.2 1"></path></svg>
-            </a>
-          {% endif %}
-        </div>
-      {% endif %}
     </aside>
   {% endif %}
 {% endfor %}

@@ -6,5 +6,3 @@ songs: hangokon-tul
 ---
 
 Szeretettel osztom meg Veletek új dalom videoklipjét, mely a "Hangokon túl" Születéstörténetét jeleníti meg. ML
-
-[YouTube videó](https://www.youtube.com/watch?v=iAaQCdBHNfw)

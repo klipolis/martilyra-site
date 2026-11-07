@@ -74,23 +74,48 @@
           {% assign video_thumbnail = video_image %}
         {% endif %}
         {% assign song_title_id = page.path | remove: 'dalok/' | remove: '.md' | slugify %}
+        {% assign song_stream_query = page.title | append: ' Marti Lyra' | uri_escape %}
         <div class="song-detail{% if page.lyrics %} has-lyrics{% endif %}">
-          <div class="song-video-slot">
-            <div class="video-player" style="--song-color: {{ page.image_color | default: '#343434' }}; --song-text-color: {{ page.image_text_color | default: '#ffffff' }}">
-              <button class="youtube-facade song-card" type="button" data-video-url="{{ page.youtube_url }}" data-video-title="{{ page.title }}" aria-label="{{ page.title }} videójának lejátszása">
-                <img class="song-card-hover-image" src="{{ video_image }}" alt="" fetchpriority="high">
-                <span class="song-card-content">
-                  <img class="song-card-thumbnail" src="{{ video_thumbnail }}" alt="" fetchpriority="high">
-                  <svg class="song-card-title" viewBox="0 0 240 240" aria-hidden="true" focusable="false">
-                    <defs>
-                      <path id="song-title-path-{{ song_title_id }}" d="M 22,120 A 98,98 0 0,0 218,120"></path>
-                    </defs>
-                    <text><textPath href="#song-title-path-{{ song_title_id }}" startOffset="50%" text-anchor="middle">{{ page.title }}</textPath></text>
-                  </svg>
-                </span>
-                <span class="youtube-play" aria-hidden="true">▶</span>
+          <div class="song-video-column">
+            <div class="song-video-slot" role="region" aria-label="{{ page.title }} videólejátszó" tabindex="-1">
+              <div class="video-player" style="--song-color: {{ page.image_color | default: '#343434' }}; --song-text-color: {{ page.image_text_color | default: '#ffffff' }}">
+                <button class="youtube-facade song-card" type="button" data-video-url="{{ page.youtube_url }}" data-video-title="{{ page.title }}" aria-label="{{ page.title }} videójának lejátszása">
+                  <img class="song-card-hover-image" src="{{ video_image }}" alt="" fetchpriority="high">
+                  <span class="song-card-content">
+                    <img class="song-card-thumbnail" src="{{ video_thumbnail }}" alt="" fetchpriority="high">
+                    <svg class="song-card-title" viewBox="0 0 240 240" aria-hidden="true" focusable="false">
+                      <defs>
+                        <path id="song-title-path-{{ song_title_id }}" d="M 22,120 A 98,98 0 0,0 218,120"></path>
+                      </defs>
+                      <text><textPath href="#song-title-path-{{ song_title_id }}" startOffset="50%" text-anchor="middle">{{ page.title }}</textPath></text>
+                    </svg>
+                  </span>
+                  <span class="youtube-play" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                  </span>
+                </button>
+                <div class="video-controls" role="group" aria-label="Videóvezérlők" hidden>
+                  <button class="video-control video-captions" type="button" aria-label="Magyar felirat bekapcsolása" aria-pressed="false" disabled>CC</button>
+                  <a class="video-control video-channel" href="https://www.youtube.com/@martilyra5556" aria-label="Marti Lyra YouTube-csatornája" target="_blank" rel="noopener noreferrer">
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0 2c-4.4 0-8 2.2-8 5v1h16v-1c0-2.8-3.6-5-8-5Z"/></svg>
+                  </a>
+                  <button class="video-control video-playback" type="button" aria-label="Videó szüneteltetése" disabled>
+                    <svg class="icon-pause" aria-hidden="true" viewBox="0 0 24 24"><path d="M7 5h4v14H7zm6 0h4v14h-4z"/></svg>
+                    <svg class="icon-play" aria-hidden="true" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                  </button>
+                </div>
+                <p class="video-error" role="status" hidden></p>
+              </div>
+              <button class="video-expand" type="button" aria-label="Videó kinagyítása" aria-pressed="false" disabled>
+                <svg class="icon-expand" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5M4 4l6 6m10-6-6 6m6 10-6-6M4 20l6-6"/></svg>
+                <svg class="icon-close" aria-hidden="true" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg>
               </button>
             </div>
+            <nav class="song-platform-links" aria-label="Dal lejátszása más platformon">
+              <a href="{{ page.youtube_url }}" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><span>YouTube</span></a>
+              <a href="https://music.apple.com/search?term={{ song_stream_query }}" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><span>Apple Music</span></a>
+              <a href="https://open.spotify.com/search/{{ song_stream_query }}" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><span>Spotify</span></a>
+            </nav>
           </div>
           {% if page.lyrics %}
             <article class="song-lyrics">{{ content }}</article>
