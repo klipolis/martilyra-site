@@ -1,5 +1,11 @@
 # Kiadásra váró változások
 
+## Megjelenés
+
+- A nyitóoldal egy zenei borítóképekből álló, diszkógömb-hatású kollázst és hangsúlyos címet mutat; a Dalok-archívum önálló, lemezhatású rácsban érhető el.
+- A bal oldali sávon kapott helyet az oldalkép, a címmel megjelenő buborékos súgóval.
+- A fénysugarak nem forognak, színintenzitásuk lassan változik, és sötét módban is láthatók.
+
 ## Dokumentáció és fejlesztői munkafolyamat
 
 - A közös tartalomfeltöltési készség új oldalra, blogbejegyzésre, szövegmódosításra, valamint képek hozzáadására és cseréjére is kiterjed.

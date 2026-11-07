@@ -3,7 +3,6 @@
 
   function init() {
     initThemeToggle();
-    initSongTower();
     initSongCardEffects();
     initSongPageRays();
     initMobileMiniPlayer();
@@ -11,161 +10,6 @@
     markCurrentPage();
     initBlogPagination();
     initVideoFacades();
-  }
-
-  function initSongTower() {
-    var tower = document.querySelector('[data-song-tower]');
-    if (!tower) {
-      return;
-    }
-
-    var cards = Array.prototype.slice.call(tower.querySelectorAll('.song-card'));
-    var prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var collapseTimer;
-    var hoveredCard = null;
-
-    function setExpanded(expanded) {
-      tower.classList.toggle('is-expanded', expanded);
-      tower.classList.toggle('is-collapsed', !expanded);
-      tower.setAttribute('aria-expanded', String(expanded));
-    }
-
-    function clearCollapseTimer() {
-      window.clearTimeout(collapseTimer);
-    }
-
-    function scheduleCollapse() {
-      clearCollapseTimer();
-      collapseTimer = window.setTimeout(function () {
-        var focusedCard = cards.some(function (card) {
-          return card.contains(document.activeElement);
-        });
-        if (!hoveredCard && !focusedCard) {
-          setExpanded(false);
-        }
-      }, 1000);
-    }
-
-    function curvePointer(value) {
-      var magnitude = Math.min(1, Math.abs(value));
-      return Math.sign(value) * (1 - Math.pow(1 - magnitude, 3));
-    }
-
-    tower.addEventListener('pointermove', function (event) {
-      if (prefersReducedMotion) {
-        return;
-      }
-
-      var bounds = tower.getBoundingClientRect();
-      var pointerX = (event.clientX - bounds.left) / bounds.width * 2 - 1;
-      var pointerY = (event.clientY - bounds.top) / bounds.height * 2 - 1;
-      var curvedX = curvePointer(pointerX);
-      var curvedY = curvePointer(pointerY);
-      if (tower.classList.contains('is-expanded')) {
-        return;
-      }
-
-      tower.style.setProperty('--tower-tilt-x', (-curvedY * 25) + 'deg');
-      tower.style.setProperty('--tower-tilt-y', (-curvedX * 34) + 'deg');
-
-      var hoveredCard = event.target.closest('.song-card');
-      cards.forEach(function (card) {
-        if (card !== hoveredCard) {
-          card.style.setProperty('--hover-x', '0rem');
-          card.style.setProperty('--hover-y', '0rem');
-        }
-      });
-      if (hoveredCard && tower.contains(hoveredCard)) {
-        var cardBounds = hoveredCard.getBoundingClientRect();
-        var cardX = (event.clientX - (cardBounds.left + cardBounds.width / 2)) / (cardBounds.width / 2);
-        var cardY = (event.clientY - (cardBounds.top + cardBounds.height / 2)) / (cardBounds.height / 2);
-        hoveredCard.style.setProperty('--hover-x', (curvePointer(cardX) * 2.5) + 'rem');
-        hoveredCard.style.setProperty('--hover-y', (curvePointer(cardY) * 2.5) + 'rem');
-      }
-    });
-
-    tower.addEventListener('pointerleave', function () {
-      tower.style.setProperty('--tower-tilt-x', '0deg');
-      tower.style.setProperty('--tower-tilt-y', '0deg');
-      cards.forEach(function (card) {
-        card.style.setProperty('--hover-x', '0rem');
-        card.style.setProperty('--hover-y', '0rem');
-      });
-      if (tower.classList.contains('is-expanded')) {
-        scheduleCollapse();
-      }
-    });
-
-    tower.addEventListener('click', function (event) {
-      if (tower.classList.contains('is-expanded')) {
-        return;
-      }
-
-      if (event.target.closest('.song-card')) {
-        event.preventDefault();
-      }
-      setExpanded(true);
-      scheduleCollapse();
-    });
-
-    tower.addEventListener('keydown', function (event) {
-      if (event.target !== tower || (event.key !== 'Enter' && event.key !== ' ')) {
-        return;
-      }
-
-      event.preventDefault();
-      setExpanded(!tower.classList.contains('is-expanded'));
-      if (tower.classList.contains('is-expanded')) {
-        scheduleCollapse();
-      } else {
-        clearCollapseTimer();
-      }
-    });
-
-    cards.forEach(function (card) {
-      card.addEventListener('pointerenter', function () {
-        hoveredCard = card;
-        clearCollapseTimer();
-      });
-      card.addEventListener('pointerleave', function () {
-        hoveredCard = null;
-        if (tower.classList.contains('is-expanded')) {
-          scheduleCollapse();
-        }
-      });
-      card.addEventListener('focusin', function () {
-        clearCollapseTimer();
-        setExpanded(true);
-      });
-      card.addEventListener('focusout', scheduleCollapse);
-      card.addEventListener('click', function (event) {
-        if (!tower.classList.contains('is-expanded') || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
-          return;
-        }
-
-        event.preventDefault();
-        card.classList.add('is-pressed');
-        window.setTimeout(function () {
-          window.location.href = card.href;
-        }, 420);
-      });
-    });
-
-    window.addEventListener('hashchange', function () {
-      if (window.location.hash === '#dalok-archive') {
-        setExpanded(true);
-      }
-    });
-
-    var archiveLink = document.querySelector('.primary-nav a[href$="#dalok-archive"]');
-    if (archiveLink) {
-      archiveLink.addEventListener('click', function () {
-        setExpanded(true);
-        clearCollapseTimer();
-      });
-    }
-
-    setExpanded(window.location.hash === '#dalok-archive');
   }
 
   function initSongPageRays() {
@@ -431,9 +275,9 @@
 
   function markCurrentPage() {
     var currentPath = normalizePath(window.location.pathname);
-    var homeLink = document.querySelector('.site-title');
+    var homeLink = document.querySelector('.sidebar-home');
     var siteRoot = homeLink ? normalizePath(new URL(homeLink.href, window.location.href).pathname) : '/';
-    var links = document.querySelectorAll('.primary-nav a');
+    var links = document.querySelectorAll('.primary-nav a, .sidebar-home');
     links.forEach(function(link) {
       var linkPath = normalizePath(new URL(link.href, window.location.href).pathname);
       var isHome = linkPath === siteRoot;

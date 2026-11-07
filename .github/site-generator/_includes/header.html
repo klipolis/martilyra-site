@@ -1,6 +1,10 @@
 {% assign folders = "dalok,blog" | split: "," %}
 {% assign pages = site.pages | sort: "path" %}
 <div class="header-links">
+  <a class="sidebar-home" href="{{ '/' | relative_url }}" aria-label="{{ site.data.site.title }}">
+    <img src="{{ '/CONTENT/assets/images/facebook-profile-portrait.jpg' | relative_url }}" alt="">
+    <span class="sidebar-tooltip" aria-hidden="true">{{ site.data.site.title }}</span>
+  </a>
   <nav class="primary-nav" aria-label="Fő navigáció">
     <ul>
       {% for folder in folders %}
@@ -10,7 +14,7 @@
           {% assign folder_label = folder_index.title | default: folder | capitalize %}
           {% assign folder_url = folder_index.url %}
           {% if folder == "dalok" %}
-            {% assign folder_url = site.data.site.dalok_url | append: '#dalok-archive' %}
+            {% assign folder_url = site.data.site.dalok_url %}
           {% endif %}
           <li>
             <a href="{{ folder_url | relative_url }}" aria-label="{{ folder_label }}">

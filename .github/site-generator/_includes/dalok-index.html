@@ -1,4 +1,5 @@
-<section class="song-tower is-collapsed" id="dalok-archive" data-song-tower tabindex="0" aria-label="Dalok lemezgyűjteménye" aria-expanded="false">
+<section class="song-archive" aria-label="Dalok lemezgyűjteménye">
+  <h1 class="song-archive-title">Dalok</h1>
   <div class="song-card-grid">
   {% assign songs = site.pages | where_exp: "song", "song.path contains 'dalok/'" | sort: "title" %}
   {% for song in songs %}
@@ -10,9 +11,8 @@
       {% else %}
         {% assign thumbnail = '/CONTENT/assets/images/' | append: song.image | relative_url %}
       {% endif %}
-      {% assign song_title_id = song.path | remove: 'dalok/' | remove: '.md' %}
-      {% assign song_scale = forloop.index0 | times: 0.05 | plus: 0.7 %}
-      <a class="song-card" href="{{ song.url | relative_url }}" aria-label="{{ song.title }}" style="--song-color: {{ song.image_color | default: '#343434' }}; --song-text-color: {{ song.image_text_color | default: '#ffffff' }}; --song-index: {{ forloop.index0 }}; --song-scale: {{ song_scale }}">
+      {% assign song_title_id = song.path | remove: 'dalok/' | remove: '.md' | slugify %}
+      <a class="song-card" href="{{ song.url | relative_url }}" aria-label="{{ song.title }}" style="--song-color: {{ song.image_color | default: '#343434' }}; --song-text-color: {{ song.image_text_color | default: '#ffffff' }}">
         <img class="song-card-hover-image" src="{{ '/CONTENT/assets/images/' | append: song.image | relative_url }}" alt="" loading="lazy">
         <span class="song-card-content">
           <img class="song-card-thumbnail" src="{{ thumbnail }}" alt="" loading="lazy">

@@ -3,11 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% if page.title %}{{ page.title }} - {% endif %}{{ site.data.site.title }}</title>
-  {% if page.redirect_to_dalok %}
-    {% assign dalok_redirect_url = site.data.site.dalok_url | relative_url %}
-    <meta http-equiv="refresh" content="0; url={{ dalok_redirect_url }}">
-  {% endif %}
+  <title>{% if page.url == '/' %}{{ site.data.site.title }}{% elsif page.title %}{{ page.title }} - {{ site.data.site.title }}{% else %}{{ site.data.site.title }}{% endif %}</title>
   <script>
     (function () {
       var savedTheme = localStorage.getItem('martilyra-theme');
@@ -17,28 +13,18 @@
         : (prefersDark ? 'dark' : 'light');
     })();
   </script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+  {% if page.url == '/' %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bowlby+One+SC&amp;display=swap&amp;text=Marti%20Lyra" rel="stylesheet">
+  {% endif %}
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
 </head>
 <body{% if page.youtube_url %} class="song-detail-page"{% endif %}>
-  <header class="site-header">
-    <div class="site-header-inner">
-      <a class="site-title" href="{{ '/' | relative_url }}">
-        <img src="{{ '/CONTENT/assets/images/facebook-profile-portrait.jpg' | relative_url }}" alt="" width="40" height="40">
-        <span>{{ site.data.site.title }}</span>
-      </a>
-    </div>
-  </header>
   {% include sidebar.html %}
-  <main class="main-content{% if page.url == '/' %} song-archive-page{% endif %}">
+  <main class="main-content{% if page.url == '/' %} home-main{% endif %}">
     <div class="container container-1185">
-      {% if page.redirect_to_dalok %}
-        {% assign dalok_redirect_url = site.data.site.dalok_url | relative_url %}
-        <p><a href="{{ dalok_redirect_url }}">Tovább a dalokhoz</a></p>
-        <script>window.location.replace("{{ dalok_redirect_url }}");</script>
-      {% elsif page.date %}
+      {% if page.date %}
         <div class="blog-page-layout">
           {% include blog-sidebar.html %}
           <article class="blog-single">
