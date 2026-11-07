@@ -19,12 +19,12 @@
       {% assign song_thumbnail = '/CONTENT/assets/images/' | append: linked_song.image | relative_url %}
     {% endif %}
     <aside class="related-song">
-      <a class="related-song-link" href="{{ linked_song.url | relative_url }}" style="--ray-delay: {{ include.index | default: 0 | plus: forloop.index0 | times: -0.73 }}s">
-        <span class="related-song-disc" aria-hidden="true">
+      <a class="related-song-link" href="{{ linked_song.url | relative_url }}" aria-label="{{ linked_song.title }}">
+        <span class="related-song-disc">
           <img src="{{ song_thumbnail }}" alt="" loading="lazy">
         </span>
-        <span class="related-song-title">{{ linked_song.title }}</span>
       </a>
+      <span class="related-song-title">{{ linked_song.title }}</span>
     </aside>
   {% endif %}
 {% endfor %}

@@ -1,5 +1,4 @@
 <section class="song-archive" aria-label="Dalok lemezgyűjteménye">
-  <h1 class="song-archive-title">Dalok</h1>
   <div class="song-card-grid">
   {% assign songs = site.pages | where_exp: "song", "song.path contains 'dalok/'" | sort: "title" %}
   {% for song in songs %}

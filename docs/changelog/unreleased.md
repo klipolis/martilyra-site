@@ -7,6 +7,8 @@
 - A fénysugarak nem forognak, színintenzitásuk lassan változik, és sötét módban is láthatók.
 - A blogbejegyzések szövege a kép mellé került, a dátum után pedig forgó minilemez mutatja a kapcsolódó dalt; a daloldalak lejátszási idővonalat, a lejátszást megszakítás nélkül megtartó nagyított nézetet és színes platformikonokat kaptak.
 - A fényhatások pulzálása változó ütemű, a diszkógömb tükrös csempéin pedig külön-külön mozgó fényvisszaverődés jelenik meg.
+- A Dalok-archívum lemezei is fényvisszaverődést kaptak; a blog minilemeze csak a forgó borítóképet mutatja, a kapcsolódó dal címe pedig nem hivatkozás.
+- A nyitóoldal címe visszafogottabb méretű és kontrasztú, a daloldalak külső lejátszási hivatkozásai pedig a bal oldali videó alatt maradnak.
 
 ## Dokumentáció és fejlesztői munkafolyamat
 

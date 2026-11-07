@@ -21,7 +21,7 @@
           <a class="blog-post-date-link" href="{{ post.url | relative_url }}">
             <time class="blog-post-date" datetime="{{ post.date | date: '%Y-%m-%d' }}">{{ post.date | date: "%Y. %m. %d." }}</time>
           </a>
-          {% include related-song.html post=post index=forloop.index0 %}
+          {% include related-song.html post=post %}
           {% assign post_title = post.title | downcase %}
           {% assign post_heading = post.content | strip | downcase %}
           {% assign has_title_heading = false %}

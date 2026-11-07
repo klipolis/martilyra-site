@@ -63,7 +63,7 @@
   }
 
   function initSongCardEffects() {
-    var cards = document.querySelectorAll('.song-card');
+    var cards = document.querySelectorAll('.song-card, .related-song');
     if (!cards.length) {
       return;
     }
@@ -83,7 +83,7 @@
     function deactivate() {
       window.clearTimeout(hideTimer);
       hideTimer = window.setTimeout(function () {
-        var activeCard = document.querySelector('.song-card:hover, .song-card:focus-within');
+        var activeCard = document.querySelector('.song-card:hover, .song-card:focus-within, .related-song:hover, .related-song:focus-within');
         if (activeCard) {
           activate(activeCard);
           return;
@@ -432,10 +432,11 @@
       slot.style.maxHeight = 'none';
       slot.style.aspectRatio = 'auto';
       slot.style.transform = 'none';
+      slot.style.transformOrigin = 'top left';
     }
 
     function clearFixedGeometry() {
-      ['position', 'top', 'left', 'width', 'height', 'max-height', 'aspect-ratio', 'transform'].forEach(function (property) {
+      ['position', 'top', 'left', 'width', 'height', 'max-height', 'aspect-ratio', 'transform', 'transform-origin'].forEach(function (property) {
         slot.style.removeProperty(property);
       });
     }
@@ -445,16 +446,25 @@
       slot.style.removeProperty('transition');
     }
 
-    function animateBounds(from, to, onFinish) {
+    function getFlipTransform(from, to) {
+      var scaleX = from.width / to.width;
+      var scaleY = from.height / to.height;
+      var translateX = from.left - to.left;
+      var translateY = from.top - to.top;
+      return 'translate(' + translateX + 'px, ' + translateY + 'px) scale(' + scaleX + ', ' + scaleY + ')';
+    }
+
+    function animateTransform(from, to, reverse, onFinish) {
       if (reducedMotion || typeof slot.animate !== 'function') {
         onFinish();
         return;
       }
 
-      expansionAnimation = slot.animate([
-        { top: from.top + 'px', left: from.left + 'px', width: from.width + 'px', height: from.height + 'px' },
-        { top: to.top + 'px', left: to.left + 'px', width: to.width + 'px', height: to.height + 'px' }
-      ], {
+      var flipTransform = reverse ? getFlipTransform(to, from) : getFlipTransform(from, to);
+      var keyframes = reverse
+        ? [{ transform: 'none' }, { transform: flipTransform }]
+        : [{ transform: flipTransform }, { transform: 'none' }];
+      expansionAnimation = slot.animate(keyframes, {
         duration: 520,
         easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)'
       });
@@ -475,9 +485,9 @@
         slot.getBoundingClientRect();
         setExpandedState(true);
         var to = slot.getBoundingClientRect();
-        setFixedGeometry(from);
+        setFixedGeometry(to);
         slot.getBoundingClientRect();
-        animateBounds(from, to, function () {
+        animateTransform(from, to, false, function () {
           clearAnimationStyles();
         });
         slot.querySelector('.video-expand').focus();
@@ -497,7 +507,7 @@
       setExpandedState(true);
       setFixedGeometry(from);
       slot.getBoundingClientRect();
-      animateBounds(from, to, function () {
+      animateTransform(from, to, true, function () {
         setExpandedState(false);
         clearAnimationStyles();
         document.body.style.overflow = previousBodyOverflow || '';
